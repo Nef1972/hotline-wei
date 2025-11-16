@@ -10,14 +10,14 @@ import {
 export const roles = pgTable("roles", {
   id: serial("id").primaryKey(),
   name: text("name").default("User").notNull(),
-  haveAccess: boolean("have_access").default(false).notNull(),
-  haveFullAccess: boolean("have_full_access").default(false).notNull(),
+  hasAccess: boolean("has_access").default(false).notNull(),
+  hasFullAccess: boolean("has_full_access").default(false).notNull(),
 });
 
 export const peoples = pgTable("peoples", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
-  peopleId: integer("role_id")
+  roleId: integer("role_id")
     .default(1)
     .references(() => roles.id, { onDelete: "set default" })
     .notNull(),

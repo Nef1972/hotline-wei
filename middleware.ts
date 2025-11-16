@@ -1,6 +1,6 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import env from "@/lib/utils/env";
-import { db } from "@/lib/db";
+import { database } from "@/lib/db";
 import { peoples } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -12,17 +12,11 @@ export default clerkMiddleware(
       return redirectToSignIn();
     }
 
-    // TODO : Mettre une route par default, sans auth nécessaire
+    const people = await database.query.peoples.findFirst({
+      where: eq(peoples.userId, userId),
+    });
 
-    const database = db();
-
-    const people = await database
-      .select()
-      .from(peoples)
-      .where(eq(peoples.userId, userId))
-      .limit(1);
-
-    if (people.length === 0) {
+    if (!people) {
       await database.insert(peoples).values({
         userId,
       });
