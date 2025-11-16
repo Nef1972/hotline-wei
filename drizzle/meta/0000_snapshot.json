@@ -54,12 +54,8 @@
           "name": "orders_people_id_peoples_id_fk",
           "tableFrom": "orders",
           "tableTo": "peoples",
-          "columnsFrom": [
-            "people_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["people_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -100,12 +96,8 @@
           "name": "peoples_role_id_roles_id_fk",
           "tableFrom": "peoples",
           "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "set default",
           "onUpdate": "no action"
         }
