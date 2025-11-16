@@ -1,0 +1,37 @@
+import {
+  boolean,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+
+export const roles = pgTable("roles", {
+  id: serial("id").primaryKey(),
+  name: text("name").default("User").notNull(),
+  haveAccess: boolean("have_access").default(false).notNull(),
+  haveFullAccess: boolean("have_full_access").default(false).notNull(),
+});
+
+export const peoples = pgTable("peoples", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  peopleId: integer("role_id")
+    .default(1)
+    .references(() => roles.id, { onDelete: "set default" })
+    .notNull(),
+});
+
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  peopleId: integer("people_id")
+    .references(() => peoples.id, { onDelete: "cascade" })
+    .notNull(),
+  description: text("description").default("No description").notNull(),
+  deliverTime: timestamp("deliver_time", { mode: "date", withTimezone: true }),
+  done: boolean("done").default(false).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
