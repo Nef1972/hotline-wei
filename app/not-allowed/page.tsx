@@ -1,9 +1,13 @@
 "use client";
 
 import { Button, Result } from "antd";
-import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { useClerk } from "@clerk/nextjs";
 
 export default function NotAllowedPage() {
+  const { signOut } = useClerk();
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
       <div className="max-w-xl w-full px-4">
@@ -27,10 +31,19 @@ export default function NotAllowedPage() {
             <div className="flex flex-col items-center gap-4">
               <div className="flex gap-3">
                 <Button className="w-45" size={"large"} type="primary">
-                  <Link href="/">Réessayer l&apos;accès</Link>
-                </Button>
-                <Button className="w-45" size={"large"}>
                   Demander l&apos;accès
+                </Button>
+                <Button
+                  className="w-45"
+                  size={"large"}
+                  icon={<FontAwesomeIcon icon={faDoorOpen} />}
+                  onClick={() =>
+                    signOut({
+                      redirectUrl: "/",
+                    })
+                  }
+                >
+                  Se déconnecter
                 </Button>
               </div>
             </div>
