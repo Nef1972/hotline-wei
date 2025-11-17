@@ -6,6 +6,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const roles = pgTable("roles", {
   id: serial("id").primaryKey(),
@@ -35,3 +36,22 @@ export const orders = pgTable("orders", {
     .defaultNow()
     .notNull(),
 });
+
+export const roleRelations = relations(roles, ({ many }) => ({
+  peoples: many(peoples),
+}));
+
+export const peopleRelations = relations(peoples, ({ one, many }) => ({
+  role: one(roles, {
+    fields: [peoples.roleId],
+    references: [roles.id],
+  }),
+  orders: many(orders),
+}));
+
+export const orderRelations = relations(orders, ({ one }) => ({
+  people: one(peoples, {
+    fields: [orders.peopleId],
+    references: [peoples.id],
+  }),
+}));

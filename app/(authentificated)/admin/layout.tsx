@@ -1,15 +1,13 @@
 "use server";
 
 import { ReactNode } from "react";
+import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { database } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { peoples } from "@/lib/db/schema";
-import { PeopleProvider } from "@/lib/contexts/PeopleContext";
-import { redirect } from "next/navigation";
-import { Navbar } from "@/lib/components/Navbar";
 
-export default async function AuthentificatedLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: ReactNode;
@@ -21,14 +19,9 @@ export default async function AuthentificatedLayout({
     with: { role: true },
   });
 
-  if (!people?.role?.hasAccess) {
-    redirect("/not-allowed");
+  if (!people?.role?.hasFullAccess) {
+    redirect("/");
   }
 
-  return (
-    <PeopleProvider people={people}>
-      <Navbar />
-      {children}
-    </PeopleProvider>
-  );
+  return children;
 }
