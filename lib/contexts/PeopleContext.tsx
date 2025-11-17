@@ -1,17 +1,14 @@
 "use client";
 
-import { People } from "@/lib/types/People";
+import { PeopleWithRole } from "@/lib/types/People";
 import { createContext, ReactNode, useContext } from "react";
-import { Role } from "@/lib/types/Role";
 
 type PeopleContextValue = {
-  people: People | undefined;
-  role: Role | undefined;
+  people: PeopleWithRole | undefined;
 };
 
 export const PeopleContext = createContext<PeopleContextValue>({
   people: undefined,
-  role: undefined,
 });
 
 export function usePeople() {
@@ -21,13 +18,9 @@ export function usePeople() {
 export const PeopleProvider = ({
   children,
   people,
-  role,
 }: {
   children: ReactNode;
-  people: People | undefined;
-  role: Role | undefined;
+  people: PeopleWithRole | undefined;
 }) => (
-  <PeopleContext.Provider value={{ people, role }}>
-    {children}
-  </PeopleContext.Provider>
+  <PeopleContext.Provider value={{ people }}>{children}</PeopleContext.Provider>
 );
