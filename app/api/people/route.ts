@@ -15,10 +15,11 @@ export async function GET() {
     );
   }
 
-  const people: PeopleWithRole | undefined = await database.query.peoples.findFirst({
-    where: eq(peoples.userId, userId),
-    with: { role: true },
-  });
+  const people: PeopleWithRole | undefined =
+    await database.query.peoples.findFirst({
+      where: eq(peoples.userId, userId),
+      with: { role: true },
+    });
 
   if (!people) {
     return NextResponse.json(

@@ -3,22 +3,52 @@ import env from "@/lib/utils/env";
 import { database } from "@/lib/db";
 import { peoples } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { ClerkClaims, clerkClaimsSchema } from "@/lib/validators/clerkClaims";
+import { z } from "zod";
+import { decodeToken } from "@/lib/utils/tokenUtils";
 
 export default clerkMiddleware(
-  async (auth, req) => {
-    const { userId, redirectToSignIn } = await auth();
+  async (auth) => {
+    const { userId, getToken, redirectToSignIn } = await auth();
 
     if (!userId) {
       return redirectToSignIn();
     }
 
-    const people = await database.query.peoples.findFirst({
+    const token = await getToken({ template: env.tokenTemplate });
+
+    if (!token) {
+      return redirectToSignIn();
+    }
+
+    const claims = decodeToken(token);
+
+    const parseResult = clerkClaimsSchema.safeParse(claims);
+
+    if (!parseResult.success) {
+      console.error("JWT claims invalid : ", z.treeifyError(parseResult.error));
+      return new Response(
+        `Invalid JWT claims : ${JSON.stringify(claims, null, 2)}`,
+        { status: 400 },
+      );
+    }
+
+    const {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+    } = parseResult.data as ClerkClaims;
+
+    const existingPeople = await database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),
     });
 
-    if (!people) {
+    if (!existingPeople) {
       await database.insert(peoples).values({
         userId,
+        firstName,
+        lastName,
+        email,
       });
     }
   },

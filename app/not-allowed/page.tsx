@@ -6,7 +6,7 @@ import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
 import { useClerk, UserButton } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {PeopleWithRole} from "@/lib/types/People";
+import { PeopleWithRole } from "@/lib/types/People";
 
 export default function NotAllowedPage() {
   const { signOut } = useClerk();

@@ -17,6 +17,9 @@ export const roles = pgTable("roles", {
 
 export const peoples = pgTable("peoples", {
   id: serial("id").primaryKey(),
+  firstName: text("firstName").default("").notNull(),
+  lastName: text("lastName").default("").notNull(),
+  email: text("email").default("").notNull(),
   userId: text("user_id").notNull(),
   roleId: integer("role_id")
     .default(1)
