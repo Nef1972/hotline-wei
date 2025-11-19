@@ -11,6 +11,7 @@ import useNotification from "@/lib/hooks/useNotification";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { usePeople } from "@/lib/contexts/PeopleContext";
 import { queryClient } from "@/lib/query/queryClient";
+import { PlusCircleFilled } from "@ant-design/icons";
 
 export default function AddOrderButton() {
   const [open, setOpen] = useState(false);
@@ -69,8 +70,13 @@ export default function AddOrderButton() {
   };
 
   return (
-    <div className="p-4">
-      <Button type="primary" onClick={() => setOpen(true)}>
+    <>
+      <Button
+        size="large"
+        type="primary"
+        icon={<PlusCircleFilled />}
+        onClick={() => setOpen(true)}
+      >
         Ajouter une commande
       </Button>
 
@@ -87,6 +93,6 @@ export default function AddOrderButton() {
       >
         <AddOrderForm form={form} setIsFormValidAction={setIsFormValid} />
       </Modal>
-    </div>
+    </>
   );
 }
