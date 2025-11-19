@@ -3,9 +3,12 @@ import env from "@/lib/utils/env";
 import { database } from "@/lib/db";
 import { peoples } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { ClerkClaims, clerkClaimsSchema } from "@/lib/validators/clerkClaims";
+import {
+  ClerkClaimsSchema,
+  clerkClaimsSchema,
+} from "@/lib/schemas/clerkClaimsSchema";
 import { z } from "zod";
-import { decodeToken } from "@/lib/utils/tokenUtils";
+import { decodeToken } from "@/lib/utils/TokenUtils";
 
 export default clerkMiddleware(
   async (auth) => {
@@ -37,7 +40,7 @@ export default clerkMiddleware(
       first_name: firstName,
       last_name: lastName,
       email,
-    } = parseResult.data as ClerkClaims;
+    } = parseResult.data as ClerkClaimsSchema;
 
     const existingPeople = await database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),

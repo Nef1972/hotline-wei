@@ -15,7 +15,7 @@ export default function NotAllowedPage() {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const response = await fetch("/api/people", {
+      const response = await fetch("/api/peoples", {
         cache: "no-store",
       });
       if (!response.ok) return;

@@ -6,4 +6,4 @@ export const clerkClaimsSchema = z.object({
   email: z.email(),
 });
 
-export type ClerkClaims = z.infer<typeof clerkClaimsSchema>;
+export type ClerkClaimsSchema = z.infer<typeof clerkClaimsSchema>;

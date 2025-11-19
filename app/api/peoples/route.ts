@@ -23,7 +23,7 @@ export async function GET() {
 
   if (!people) {
     return NextResponse.json(
-      { error: "Profil people introuvable pour cet utilisateur." },
+      { error: "Profil introuvable pour cet utilisateur." },
       { status: 404 },
     );
   }

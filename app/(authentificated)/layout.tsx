@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { peoples } from "@/lib/db/schema";
 import { PeopleProvider } from "@/lib/contexts/PeopleContext";
 import { redirect } from "next/navigation";
-import { Navbar } from "@/lib/components/Navbar";
+import { Navbar } from "@/lib/components/navbar/Navbar";
 
 export default async function AuthentificatedLayout({
   children,

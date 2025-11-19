@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
-import { ClerkProvider } from "@clerk/nextjs";
+import { Providers } from "@/lib/providers/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Weinter is coming",
-  description: "Author : Malo Bonnefoy",
+  description: "Author : Paulin & Malo Bonnefoy",
 };
 
 export default async function RootLayout({
@@ -31,7 +31,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>{children}</ClerkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
