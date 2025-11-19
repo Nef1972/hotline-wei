@@ -4,12 +4,13 @@ import { useState } from "react";
 import { Button, Form, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { NewOrder } from "@/lib/types/Order";
+import { NewOrder, Order } from "@/lib/types/Order";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import AddOrderForm from "@/lib/components/order/AddOrderForm";
 import useNotification from "@/lib/hooks/useNotification";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { usePeople } from "@/lib/contexts/PeopleContext";
+import { queryClient } from "@/lib/query/queryClient";
 
 export default function AddOrderButton() {
   const [open, setOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function AddOrderButton() {
   const notification = useNotification();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: NewOrder) => {
+    mutationFn: async (data: NewOrder): Promise<Order> => {
       const res = await axios.post("/api/orders", data);
       return res.data;
     },
@@ -29,6 +30,7 @@ export default function AddOrderButton() {
       notification.success({ description: "Commande enregistrée avec succès" });
       form.resetFields();
       setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["orders"] }).then();
     },
     onError: (error) => {
       notification.error({

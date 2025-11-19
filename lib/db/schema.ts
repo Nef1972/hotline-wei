@@ -33,11 +33,15 @@ export const orders = pgTable("orders", {
     .references(() => peoples.id, { onDelete: "cascade" })
     .notNull(),
   description: text("description").default("No description").notNull(),
-  deliverTime: timestamp("deliver_time", { mode: "date", withTimezone: true }),
+  deliverTime: timestamp("deliver_time", {
+    mode: "date",
+    withTimezone: true,
+  }).notNull(),
   done: boolean("done").default(false).notNull(),
   createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .defaultNow()
     .notNull(),
+  deleted: boolean("deleted").default(false).notNull(),
 });
 
 export const roleRelations = relations(roles, ({ many }) => ({
