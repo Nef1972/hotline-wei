@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Weinter is coming",
+  title: "Hotline Wei",
   description: "Author : Paulin & Malo Bonnefoy",
 };
 

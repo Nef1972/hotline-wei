@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query/queryClient";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -27,16 +27,19 @@ export function Providers({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const memoizedTheme = useMemo(
+    () => ({
+      algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+    }),
+    [isDark],
+  );
+
   if (!mounted) return null;
 
   return (
     <QueryClientProvider client={queryClient}>
       <ClerkProvider>
-        <ConfigProvider
-          theme={{
-            algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-          }}
-        >
+        <ConfigProvider theme={memoizedTheme}>
           <App>{children}</App>
         </ConfigProvider>
       </ClerkProvider>

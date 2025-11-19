@@ -8,10 +8,10 @@ import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
 import { eq } from "drizzle-orm";
 import { Order } from "@/lib/types/Order";
 import { PeopleWithOrders } from "@/lib/types/People";
+import { idSchema } from "@/lib/schemas/utils/idSchema";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
-
   if (!userId) return NEED_TO_BE_AUTHENTICATED;
 
   const body = await req.json();
@@ -37,18 +37,44 @@ export async function POST(req: Request) {
   return NextResponse.json(newOrder, { status: 201 });
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   const { userId } = await auth();
-
   if (!userId) return NEED_TO_BE_AUTHENTICATED;
+
+  const url = new URL(req.url);
+  const onlyActive = url.searchParams.get("onlyActive") === "true";
 
   const peopleWithOrders: PeopleWithOrders | undefined =
     await database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),
-      with: { orders: true },
+      with: {
+        orders: onlyActive
+          ? {
+              where: eq(orders.deleted, false),
+            }
+          : true,
+      },
     });
 
-  const orders: Order[] = peopleWithOrders?.orders ?? [];
+  const allOrders: Order[] = peopleWithOrders?.orders ?? [];
 
-  return NextResponse.json(orders, { status: 200 });
+  return NextResponse.json(allOrders, { status: 200 });
+}
+
+export async function DELETE(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return NEED_TO_BE_AUTHENTICATED;
+
+  const url = new URL(req.url);
+  const parsed = idSchema.safeParse(url.searchParams.get("id"));
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: joinZodErrors(parsed) }, { status: 400 });
+  }
+
+  const id = parsed.data;
+
+  await database.update(orders).set({ deleted: true }).where(eq(orders.id, id));
+
+  return NextResponse.json({ status: 200 });
 }

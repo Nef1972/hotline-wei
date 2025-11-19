@@ -1,11 +1,11 @@
 "use client";
 
-import {UserButton} from "@clerk/nextjs";
-import {Button} from "antd";
+import { UserButton } from "@clerk/nextjs";
+import { Button } from "antd";
 import Link from "next/link";
-import {usePeople} from "@/lib/contexts/PeopleContext";
-import {faHeadset} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { usePeople } from "@/lib/contexts/PeopleContext";
+import { faHeadset } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function Navbar() {
   const { people } = usePeople();
@@ -22,9 +22,9 @@ export function Navbar() {
           <Button>Admin</Button>
         </Link>
       )}
-        <div className="flex scale-[1.4]">
-            <UserButton />
-        </div>
+      <div className="flex scale-[1.4]">
+        <UserButton />
+      </div>
     </nav>
   );
 }
