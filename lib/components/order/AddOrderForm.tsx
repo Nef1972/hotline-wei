@@ -1,7 +1,7 @@
 "use client";
 
-import {DatePicker, Form, FormInstance, Input} from "antd";
-import {Dispatch, SetStateAction} from "react";
+import { DatePicker, Form, FormInstance, Input } from "antd";
+import { Dispatch, SetStateAction } from "react";
 
 type AddOrderFormProps = {
   form: FormInstance;

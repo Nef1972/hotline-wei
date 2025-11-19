@@ -4,11 +4,11 @@ import { PeopleWithRole } from "@/lib/types/People";
 import { createContext, ReactNode, useContext } from "react";
 
 type PeopleContextValue = {
-  people: PeopleWithRole | undefined;
+  people: PeopleWithRole | null;
 };
 
-export const PeopleContext = createContext<PeopleContextValue>({
-  people: undefined,
+const PeopleContext = createContext<PeopleContextValue>({
+  people: null,
 });
 
 export function usePeople() {
@@ -20,7 +20,7 @@ export const PeopleProvider = ({
   people,
 }: {
   children: ReactNode;
-  people: PeopleWithRole | undefined;
+  people: PeopleWithRole;
 }) => (
   <PeopleContext.Provider value={{ people }}>{children}</PeopleContext.Provider>
 );

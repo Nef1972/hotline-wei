@@ -1,32 +1,15 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { createOrderSchema } from "@/lib/schemas/createOrderSchema";
+import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { database } from "@/lib/db";
-import { orders, peoples } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { People } from "@/lib/types/People";
+import { orders } from "@/lib/db/schema";
+import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
 
-  if (!userId) {
-    return NextResponse.json(
-      { error: "Vous devez être connecté pour effectuer cette action." },
-      { status: 401 },
-    );
-  }
-
-  const people: People | undefined = await database.query.peoples.findFirst({
-    where: eq(peoples.userId, userId),
-  });
-
-  if (!people) {
-    return NextResponse.json(
-      { error: "Profil introuvable pour cet utilisateur." },
-      { status: 404 },
-    );
-  }
+  if (!userId) return NEED_TO_BE_AUTHENTICATED;
 
   const body = await req.json();
   const parsed = createOrderSchema.safeParse(body);
@@ -35,7 +18,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: joinZodErrors(parsed) }, { status: 400 });
   }
 
-  const { description, deliverTime } = parsed.data;
+  const { people, description, deliverTime } = parsed.data;
+
+  if (!people?.id || people?.userId != userId) return NEED_TO_BE_AUTHENTICATED;
 
   const [newOrder] = await database
     .insert(orders)

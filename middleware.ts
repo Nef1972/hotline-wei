@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import {
   ClerkClaimsSchema,
   clerkClaimsSchema,
-} from "@/lib/schemas/clerkClaimsSchema";
+} from "@/lib/schemas/clerk/clerkClaimsSchema";
 import { z } from "zod";
 import { decodeToken } from "@/lib/utils/TokenUtils";
 

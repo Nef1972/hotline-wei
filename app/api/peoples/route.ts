@@ -4,16 +4,12 @@ import { database } from "@/lib/db";
 import { peoples } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import type { PeopleWithRole } from "@/lib/types/People";
+import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
 
 export async function GET() {
   const { userId } = await auth();
 
-  if (!userId) {
-    return NextResponse.json(
-      { error: "Utilisateur non authentifié." },
-      { status: 401 },
-    );
-  }
+  if (!userId) return NEED_TO_BE_AUTHENTICATED;
 
   const people: PeopleWithRole | undefined =
     await database.query.peoples.findFirst({
