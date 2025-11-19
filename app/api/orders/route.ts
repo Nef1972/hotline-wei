@@ -3,8 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { database } from "@/lib/db";
-import { orders } from "@/lib/db/schema";
+import { orders, peoples } from "@/lib/db/schema";
 import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
+import { eq } from "drizzle-orm";
+import { Order } from "@/lib/types/Order";
+import { PeopleWithOrders } from "@/lib/types/People";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -32,4 +35,20 @@ export async function POST(req: Request) {
     .returning();
 
   return NextResponse.json(newOrder, { status: 201 });
+}
+
+export async function GET() {
+  const { userId } = await auth();
+
+  if (!userId) return NEED_TO_BE_AUTHENTICATED;
+
+  const peopleWithOrders: PeopleWithOrders | undefined =
+    await database.query.peoples.findFirst({
+      where: eq(peoples.userId, userId),
+      with: { orders: true },
+    });
+
+  const orders: Order[] = peopleWithOrders?.orders ?? [];
+
+  return NextResponse.json(orders, { status: 200 });
 }

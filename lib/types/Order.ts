@@ -6,5 +6,5 @@ export type Order = InferSelectModel<typeof orders>;
 
 export type NewOrder = { people: PeopleWithRole | null } & Omit<
   Order,
-  "id" | "peopleId" | "done" | "createdAt"
+  "id" | "peopleId" | "done" | "createdAt" | "deleted"
 >;
