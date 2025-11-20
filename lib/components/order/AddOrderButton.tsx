@@ -89,6 +89,7 @@ export default function AddOrderButton() {
         cancelText="Annuler"
         confirmLoading={isPending}
         okButtonProps={{ disabled: !isFormValid }}
+        maskClosable={false}
         destroyOnHidden
       >
         <AddOrderForm form={form} setIsFormValidAction={setIsFormValid} />
