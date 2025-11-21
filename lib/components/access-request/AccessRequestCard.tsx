@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ConfigProvider, Popconfirm, Tooltip } from "antd";
+import { Button, ConfigProvider, Popconfirm, Spin, Tooltip } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
@@ -11,6 +11,7 @@ import {
 } from "@/lib/types/AccessRequest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 type AccessRequestCardProps = {
   accessRequest: AccessRequestWithPeople;
@@ -29,11 +30,14 @@ export const AccessRequestCard = ({
     minute: "2-digit",
   });
 
-  const { mutate } = useMutation({
+  const [isSucess, setIsSuccess] = useState(false);
+
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: ProcessAccessRequest) => {
       await axios.post(`/api/access-requests/${accessRequest.id}`, data);
     },
     onSuccess: () => {
+      setIsSuccess(true);
       notification.success({
         description: "Requête d'accès traitée avec succès",
       });
@@ -45,6 +49,8 @@ export const AccessRequestCard = ({
       });
     },
   });
+
+  const isPendingOrSuccess = isPending || isSucess;
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
@@ -59,51 +65,59 @@ export const AccessRequestCard = ({
         {createdAt}
       </div>
 
-      <div className="flex gap-3 justify-center">
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                colorPrimary: "darkgreen",
-                controlOutline: "transparent",
+      {isPendingOrSuccess ? (
+        <div className="flex justify-center">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <div className="flex gap-3 justify-center">
+          <ConfigProvider
+            theme={{
+              components: {
+                Button: {
+                  colorPrimary: "darkgreen",
+                  controlOutline: "transparent",
+                },
               },
-            },
-          }}
-        >
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<FontAwesomeIcon icon={faCheck} />}
-            onClick={() => mutate({ isAccepted: true })}
-          ></Button>
-        </ConfigProvider>
-
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                colorPrimary: "red",
-                controlOutline: "transparent",
-              },
-            },
-          }}
-        >
-          <Popconfirm
-            title="Refuser cette demande ?"
-            description="Cette action est irréversible."
-            okText="Oui"
-            cancelText="Non"
-            placement="topRight"
-            onConfirm={() => mutate({ isAccepted: false })}
+            }}
           >
             <Button
               type="primary"
               shape="circle"
-              icon={<FontAwesomeIcon icon={faXmark} />}
+              icon={<FontAwesomeIcon icon={faCheck} />}
+              onClick={() => mutate({ isAccepted: true })}
+              disabled={isPendingOrSuccess}
             ></Button>
-          </Popconfirm>
-        </ConfigProvider>
-      </div>
+          </ConfigProvider>
+
+          <ConfigProvider
+            theme={{
+              components: {
+                Button: {
+                  colorPrimary: "red",
+                  controlOutline: "transparent",
+                },
+              },
+            }}
+          >
+            <Popconfirm
+              title="Refuser cette demande ?"
+              description="Cette action est irréversible."
+              okText="Oui"
+              cancelText="Non"
+              placement="topRight"
+              onConfirm={() => mutate({ isAccepted: false })}
+            >
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<FontAwesomeIcon icon={faXmark} />}
+                disabled={isPendingOrSuccess}
+              ></Button>
+            </Popconfirm>
+          </ConfigProvider>
+        </div>
+      )}
     </div>
   );
 };
