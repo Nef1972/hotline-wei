@@ -44,6 +44,17 @@ export const orders = pgTable("orders", {
   deleted: boolean("deleted").default(false).notNull(),
 });
 
+export const accessRequests = pgTable("access_requests", {
+  id: serial("id").primaryKey(),
+  peopleId: integer("people_id")
+    .references(() => peoples.id, { onDelete: "cascade" })
+    .notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  done: boolean("done").default(false).notNull(),
+});
+
 export const roleRelations = relations(roles, ({ many }) => ({
   peoples: many(peoples),
 }));
@@ -54,11 +65,19 @@ export const peopleRelations = relations(peoples, ({ one, many }) => ({
     references: [roles.id],
   }),
   orders: many(orders),
+  accessRequests: many(accessRequests),
 }));
 
 export const orderRelations = relations(orders, ({ one }) => ({
   people: one(peoples, {
     fields: [orders.peopleId],
+    references: [peoples.id],
+  }),
+}));
+
+export const accessRequestRelations = relations(accessRequests, ({ one }) => ({
+  people: one(peoples, {
+    fields: [accessRequests.peopleId],
     references: [peoples.id],
   }),
 }));

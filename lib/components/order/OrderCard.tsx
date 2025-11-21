@@ -20,16 +20,14 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
   const createdAt = new Date(order.createdAt).toLocaleString("fr-FR", {
     day: "2-digit",
-    month: "short",
-    year: "numeric",
+    month: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
   });
 
   const deliverTime = new Date(order.deliverTime).toLocaleString("fr-FR", {
     day: "2-digit",
-    month: "short",
-    year: "numeric",
+    month: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -50,41 +48,42 @@ export const OrderCard = ({ order }: OrderCardProps) => {
   });
 
   return (
-    <Tooltip title={order.description}>
-      <div className="bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 flex flex-col justify-between relative">
-        <Popconfirm
-          title="Supprimer cette commande ?"
-          description="Cette action est irréversible."
-          okText="Oui"
-          cancelText="Non"
-          placement="topRight"
-          onConfirm={() => mutate()}
+    <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
+      <Popconfirm
+        title="Supprimer cette commande ?"
+        description="Cette action est irréversible."
+        okText="Oui"
+        cancelText="Non"
+        placement="topRight"
+        onConfirm={() => mutate()}
+      >
+        <button
+          className="absolute top-3 right-3 text-red-500 hover:text-red-700 cursor-pointer"
+          title="Supprimer"
         >
-          <button
-            className="absolute top-3 right-3 text-red-500 hover:text-red-700"
-            title="Supprimer"
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </Popconfirm>
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
+      </Popconfirm>
 
-        <h2 className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2 mb-4">
-          {order.description}
-        </h2>
+      <Tooltip
+        className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2 mb-4"
+        title={order.description}
+      >
+        {order.description}
+      </Tooltip>
 
-        <div className="flex justify-between items-center text-sm text-zinc-700 dark:text-zinc-300">
+      <div className="flex justify-between items-center">
+        <div>
           <div>
-            <div>
-              <span className="font-semibold">Créé le:</span> {createdAt}
-            </div>
-            <div>
-              <span className="font-semibold">Livraison le:</span> {deliverTime}
-            </div>
+            <span className="font-semibold">Créé le :</span> {createdAt}
           </div>
-
-          <div>{order.done ? <DoneTag /> : <InProgressTag />}</div>
+          <div>
+            <span className="font-semibold">Livraison le :</span> {deliverTime}
+          </div>
         </div>
+
+        <div>{order.done ? <DoneTag /> : <InProgressTag />}</div>
       </div>
-    </Tooltip>
+    </div>
   );
 };
