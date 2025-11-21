@@ -13,6 +13,7 @@ export interface AccessRequestRepository {
   create: (userId: string) => Promise<AccessRequest | undefined>;
   updateAccessRequestAndPromotePeopleIfApplicable: (
     id: number,
+    peopleId: number,
     isAccepted: boolean,
   ) => Promise<void>;
 }
