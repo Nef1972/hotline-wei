@@ -2,16 +2,24 @@
 
 import { Button, Result } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen, faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 import { useClerk, UserButton } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PeopleWithRole } from "@/lib/types/People";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { AccessRequest } from "@/lib/types/AccessRequest";
+import useNotification from "@/lib/hooks/useNotification";
 
 export default function NotAllowedPage() {
   const { signOut } = useClerk();
 
   const router = useRouter();
+
+  const notification = useNotification();
+
+  const [hasCreatedAccessRequest, setHasCreatedAccessRequest] = useState(false);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -31,6 +39,39 @@ export default function NotAllowedPage() {
 
     return () => clearInterval(intervalId);
   }, [router]);
+
+  const {
+    data: hasProcessingAccessRequest,
+    isPending: isCheckProcessingPending,
+  } = useQuery({
+    queryKey: ["hasProcessingRequest"],
+    queryFn: async (): Promise<boolean> => {
+      const response = await axios.get("/api/access-requests/processing");
+      return response.data;
+    },
+  });
+
+  const {
+    mutate: createAccessRequest,
+    isPending: isCreatingRequestAccessPending,
+  } = useMutation({
+    mutationFn: async (): Promise<AccessRequest> => {
+      const res = await axios.post("/api/access-requests");
+      return res.data;
+    },
+    onSuccess: () => {
+      notification.success({ description: "Demande effectuée avec succès" });
+      setHasCreatedAccessRequest(true);
+    },
+    onError: (error) => {
+      notification.error({
+        description: `Erreur lors de la demande : ${error.message}`,
+      });
+    },
+  });
+
+  const hasProcessingRequest =
+    hasProcessingAccessRequest || hasCreatedAccessRequest;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
@@ -54,9 +95,25 @@ export default function NotAllowedPage() {
           }
           extra={
             <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-              <Button className="w-45" size={"large"} type="primary">
-                Demander l&apos;accès
+              <Button
+                icon={
+                  hasProcessingRequest && (
+                    <FontAwesomeIcon icon={faHourglassHalf} />
+                  )
+                }
+                className="w-45"
+                size={"large"}
+                type="primary"
+                onClick={() => createAccessRequest()}
+                disabled={
+                  hasProcessingRequest ||
+                  isCheckProcessingPending ||
+                  isCreatingRequestAccessPending
+                }
+              >
+                {hasProcessingRequest ? "Accès demandé" : "Demander l'accès"}
               </Button>
+
               <Button
                 className="w-45"
                 type={"default"}

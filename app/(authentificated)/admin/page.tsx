@@ -7,6 +7,7 @@ import {
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion";
 
 enum TabItem {
   PEOPLES,
@@ -21,7 +22,7 @@ export default function AdminPage() {
       key: TabItem.PEOPLES,
       label: "Demandes d'accès",
       icon: faUsers,
-      children: <div>Contenu des demandes d&apos;accès</div>,
+      children: <AdminPeoplesGestion />,
     },
     {
       key: TabItem.ORDERS,
@@ -57,7 +58,7 @@ export default function AdminPage() {
         ))}
       </div>
 
-      <div className="flex-1 p-6 bg-white dark:bg-zinc-950">
+      <div className="flex-1 p-6">
         {tabItems.find((tab) => tab.key === activeKey)?.children}
       </div>
     </div>
