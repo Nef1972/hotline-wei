@@ -60,6 +60,7 @@ export const AccessRequestRepositoryImpl: AccessRequestRepository = {
 
   updateAccessRequestAndPromotePeopleIfApplicable: async (
     id: number,
+    peopleId: number,
     isAccepted: boolean,
   ) =>
     await database.transaction(async (tx) => {
@@ -70,14 +71,6 @@ export const AccessRequestRepositoryImpl: AccessRequestRepository = {
 
       if (!isAccepted) return;
 
-      const accessRequestWithPeople: AccessRequestWithPeople | undefined =
-        await tx.query.accessRequests.findFirst({
-          where: eq(accessRequests.id, id),
-          with: {
-            people: true,
-          },
-        });
-
       const rolePeople = await tx.query.roles.findFirst({
         where: eq(roles.name, "User"),
       });
@@ -85,6 +78,6 @@ export const AccessRequestRepositoryImpl: AccessRequestRepository = {
       await tx
         .update(peoples)
         .set({ roleId: rolePeople!.id })
-        .where(eq(peoples.id, accessRequestWithPeople!.people.id));
+        .where(eq(peoples.id, peopleId));
     }),
 };

@@ -31,5 +31,9 @@ export const processAccessRequest = async (
 
   if (!accessRequest) throw new NotFoundError("Demande d'accès introuvable");
 
-  await repo.updateAccessRequestAndPromotePeopleIfApplicable(id, isAccepted);
+  await repo.updateAccessRequestAndPromotePeopleIfApplicable(
+    id,
+    accessRequest.people.id,
+    isAccepted,
+  );
 };
