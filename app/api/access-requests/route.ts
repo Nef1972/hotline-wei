@@ -1,39 +1,26 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { database } from "@/lib/db";
-import { accessRequests, peoples } from "@/lib/db/schema";
-import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
-import { eq } from "drizzle-orm";
-import { AccessRequestWithPeople } from "@/lib/types/AccessRequest";
-import { People } from "@/lib/types/People";
+import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
+import { getAllActiveAccessRequests } from "@/lib/api/application/useCases/access-requests/GetAllAccessRequests";
+import { AccessRequestRepositoryImpl } from "@/lib/api/infrastructure/repositories/AccessRequestRepositoryImpl";
+import { createNewAccessRequest } from "@/lib/api/application/useCases/access-requests/CreateNewAccessRequest";
+import { controller } from "@/lib/api/shared/http/controller";
 
-export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return NEED_TO_BE_AUTHENTICATED;
+export const GET = controller(async () => {
+  await authenticateUserOrReject();
 
-  const allAccessRequest: AccessRequestWithPeople[] =
-    await database.query.accessRequests.findMany({
-      where: eq(accessRequests.done, false),
-      with: { people: true },
-    });
+  const activeAccessRequests = await getAllActiveAccessRequests(
+    AccessRequestRepositoryImpl,
+  );
 
-  return NextResponse.json(allAccessRequest, { status: 200 });
-}
+  return NextResponse.json(activeAccessRequests, { status: 200 });
+});
 
-export async function POST() {
-  const { userId } = await auth();
-  if (!userId) return NEED_TO_BE_AUTHENTICATED;
+export const POST = controller(async () => {
+  const userId = await authenticateUserOrReject();
 
-  const [accessRequest] = await database.transaction(async (tx) => {
-    const people: People | undefined = await tx.query.peoples.findFirst({
-      where: eq(peoples.userId, userId),
-    });
-
-    return tx
-      .insert(accessRequests)
-      .values({ peopleId: people!.id })
-      .returning();
+  const accessRequest = createNewAccessRequest(AccessRequestRepositoryImpl, {
+    userId,
   });
 
   return NextResponse.json(accessRequest, { status: 201 });
-}
+});

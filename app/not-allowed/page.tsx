@@ -6,10 +6,10 @@ import { faDoorOpen, faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 import { useClerk, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PeopleWithRole } from "@/lib/types/People";
+import { PeopleWithRole } from "@/lib/api/domain/entities/People";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { AccessRequest } from "@/lib/types/AccessRequest";
+import { AccessRequest } from "@/lib/api/domain/entities/AccessRequest";
 import useNotification from "@/lib/hooks/useNotification";
 
 export default function NotAllowedPage() {

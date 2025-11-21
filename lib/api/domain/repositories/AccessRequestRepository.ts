@@ -1,0 +1,18 @@
+import {
+  AccessRequest,
+  AccessRequestWithPeople,
+} from "@/lib/api/domain/entities/AccessRequest";
+
+export interface AccessRequestRepository {
+  findAll: (params: { done?: boolean }) => Promise<AccessRequestWithPeople[]>;
+  findById: (id: number) => Promise<AccessRequestWithPeople | undefined>;
+  findByUserId: (
+    userId: string,
+    params: { done?: boolean },
+  ) => Promise<AccessRequestWithPeople | undefined>;
+  create: (userId: string) => Promise<AccessRequest | undefined>;
+  updateAccessRequestAndPromotePeopleIfApplicable: (
+    id: number,
+    isAccepted: boolean,
+  ) => Promise<void>;
+}
