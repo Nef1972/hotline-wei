@@ -4,7 +4,7 @@ import { Spin } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useMemo, useState } from "react";
-import { Order } from "@/lib/types/Order";
+import { Order } from "@/lib/api/domain/entities/Order";
 import { OrderCard } from "@/lib/components/order/OrderCard";
 import { SortToggle } from "@/lib/components/toolbar/SortToggle";
 import { SortType } from "@/lib/components/toolbar/SortType";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ConfigProvider, Popconfirm, Spin, Tooltip } from "antd";
+import { Spin, Tooltip } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
@@ -8,10 +8,10 @@ import useNotification from "@/lib/hooks/useNotification";
 import {
   AccessRequestWithPeople,
   ProcessAccessRequest,
-} from "@/lib/types/AccessRequest";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+} from "@/lib/api/domain/entities/AccessRequest";
 import { useState } from "react";
+import { ValidateButton } from "@/lib/components/shared/buttons/ValidateButton";
+import { RefuseButton } from "@/lib/components/shared/buttons/RefuseButton";
 
 type AccessRequestCardProps = {
   accessRequest: AccessRequestWithPeople;
@@ -71,51 +71,15 @@ export const AccessRequestCard = ({
         </div>
       ) : (
         <div className="flex gap-3 justify-center">
-          <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  colorPrimary: "darkgreen",
-                  controlOutline: "transparent",
-                },
-              },
-            }}
-          >
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<FontAwesomeIcon icon={faCheck} />}
-              onClick={() => mutate({ isAccepted: true })}
-              disabled={isPendingOrSuccess}
-            ></Button>
-          </ConfigProvider>
+          <ValidateButton
+            onClick={() => mutate({ isAccepted: true })}
+            disabled={isPendingOrSuccess}
+          />
 
-          <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  colorPrimary: "red",
-                  controlOutline: "transparent",
-                },
-              },
-            }}
-          >
-            <Popconfirm
-              title="Refuser cette demande ?"
-              description="Cette action est irréversible."
-              okText="Oui"
-              cancelText="Non"
-              placement="topRight"
-              onConfirm={() => mutate({ isAccepted: false })}
-            >
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<FontAwesomeIcon icon={faXmark} />}
-                disabled={isPendingOrSuccess}
-              ></Button>
-            </Popconfirm>
-          </ConfigProvider>
+          <RefuseButton
+            onConfirm={() => mutate({ isAccepted: false })}
+            disabled={isPendingOrSuccess}
+          />
         </div>
       )}
     </div>

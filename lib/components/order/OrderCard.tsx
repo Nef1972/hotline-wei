@@ -1,11 +1,11 @@
 "use client";
 
 import { Popconfirm, Tooltip } from "antd";
-import { Order } from "@/lib/types/Order";
+import { Order } from "@/lib/api/domain/entities/Order";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { DoneTag } from "@/lib/components/tag/DoneTag";
-import { InProgressTag } from "@/lib/components/tag/InProgressTag";
+import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
+import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";

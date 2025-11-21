@@ -1,28 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { database } from "@/lib/db";
-import { peoples } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import type { PeopleWithRole } from "@/lib/types/People";
-import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
+import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/peoples/GetPeopleMatchingWithAnUser";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repositories/PeopleRepositoryImpl";
+import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
+import { controller } from "@/lib/api/shared/http/controller";
 
-export async function GET() {
-  const { userId } = await auth();
-
-  if (!userId) return NEED_TO_BE_AUTHENTICATED;
-
-  const people: PeopleWithRole | undefined =
-    await database.query.peoples.findFirst({
-      where: eq(peoples.userId, userId),
-      with: { role: true },
-    });
-
-  if (!people) {
-    return NextResponse.json(
-      { error: "Profil introuvable pour cet utilisateur." },
-      { status: 404 },
-    );
-  }
-
+export const GET = controller(async () => {
+  const userId = await authenticateUserOrReject();
+  const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
+    userId,
+  });
   return NextResponse.json(people, { status: 200 });
-}
+});

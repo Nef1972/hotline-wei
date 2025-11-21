@@ -1,9 +1,9 @@
 "use client";
 
 import { Select } from "antd";
-import { AllTag } from "@/lib/components/tag/AllTag";
-import { DoneTag } from "@/lib/components/tag/DoneTag";
-import { InProgressTag } from "@/lib/components/tag/InProgressTag";
+import { AllTag } from "@/lib/components/shared/tags/AllTag";
+import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
+import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 
 type SortTypeProps = {
   statusFilter: "all" | "done" | "pending";

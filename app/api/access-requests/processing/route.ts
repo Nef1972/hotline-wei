@@ -1,28 +1,16 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { database } from "@/lib/db";
-import { NEED_TO_BE_AUTHENTICATED } from "@/lib/constants/ResponseConstant";
-import { AccessRequestWithPeople } from "@/lib/types/AccessRequest";
-import { and, eq } from "drizzle-orm";
-import { People } from "@/lib/types/People";
-import { accessRequests, peoples } from "@/lib/db/schema";
+import { controller } from "@/lib/api/shared/http/controller";
+import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
+import { checkIfAccessRequestIsProcessingForUser } from "@/lib/api/application/useCases/access-requests/CheckIfAccessRequestIsProcessingForUser";
+import { AccessRequestRepositoryImpl } from "@/lib/api/infrastructure/repositories/AccessRequestRepositoryImpl";
 
-export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return NEED_TO_BE_AUTHENTICATED;
+export const GET = controller(async () => {
+  const userId = await authenticateUserOrReject();
 
-  const people: People | undefined = await database.query.peoples.findFirst({
-    where: eq(peoples.userId, userId),
-  });
-
-  const accessRequest: AccessRequestWithPeople | undefined =
-    await database.query.accessRequests.findFirst({
-      where: and(
-        eq(accessRequests.done, false),
-        eq(accessRequests.peopleId, people!.id),
-      ),
-      with: { people: true },
+  const isAccessRequestProcessing: boolean =
+    await checkIfAccessRequestIsProcessingForUser(AccessRequestRepositoryImpl, {
+      userId,
     });
 
-  return NextResponse.json(!!accessRequest, { status: 200 });
-}
+  return NextResponse.json(isAccessRequestProcessing, { status: 200 });
+});

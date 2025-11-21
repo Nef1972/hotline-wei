@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { AccessRequestWithPeople } from "@/lib/types/AccessRequest";
+import { AccessRequestWithPeople } from "@/lib/api/domain/entities/AccessRequest";
 import { AccessRequestCard } from "@/lib/components/access-request/AccessRequestCard";
 import { Spin } from "antd";
 

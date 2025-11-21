@@ -1,0 +1,38 @@
+import { database } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { orders, peoples } from "@/lib/db/schema";
+import { NewOrder, Order } from "@/lib/api/domain/entities/Order";
+import { OrderRepository } from "@/lib/api/domain/repositories/OrderRepository";
+import { People } from "@/lib/api/domain/entities/People";
+
+export const OrderRepositoryImpl: OrderRepository = {
+  create: async (
+    userId: string,
+    newOrder: NewOrder,
+  ): Promise<Order | undefined> => {
+    const [order] = await database.transaction(async (tx) => {
+      const people: People | undefined = await tx.query.peoples.findFirst({
+        where: eq(peoples.userId, userId),
+      });
+
+      return tx
+        .insert(orders)
+        .values({
+          peopleId: people!.id,
+          description: newOrder.description,
+          deliverTime: newOrder.deliverTime,
+        })
+        .returning();
+    });
+    return order;
+  },
+
+  update: async (id: number, order: Partial<Order>): Promise<Order> => {
+    const [updatedOrder] = await database
+      .update(orders)
+      .set(order)
+      .where(eq(orders.id, id))
+      .returning();
+    return updatedOrder;
+  },
+};
