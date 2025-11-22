@@ -1,9 +1,10 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AccessRequestWithPeople } from "@/lib/api/domain/entities/AccessRequest";
-import { AccessRequestCard } from "@/lib/components/access-request/AccessRequestCard";
+import { AdminAccessRequestCard } from "@/lib/components/access-request/AdminAccessRequestCard";
 import { Spin } from "antd";
+import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
 
 export const AdminPeoplesGestion = () => {
   const { data: accessRequests, isPending } = useQuery({
@@ -25,16 +26,9 @@ export const AdminPeoplesGestion = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <AnimatePresence>
         {accessRequests?.map((accessRequest: AccessRequestWithPeople) => (
-          <motion.div
-            key={accessRequest.id}
-            layout
-            initial={{ opacity: 0, scale: 0.9, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -10 }}
-            transition={{ duration: 0.25 }}
-          >
-            <AccessRequestCard accessRequest={accessRequest} />
-          </motion.div>
+          <AnimateCard key={accessRequest.id}>
+            <AdminAccessRequestCard accessRequest={accessRequest} />
+          </AnimateCard>
         ))}
       </AnimatePresence>
     </div>

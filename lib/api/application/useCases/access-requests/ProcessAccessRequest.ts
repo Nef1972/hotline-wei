@@ -3,7 +3,7 @@ import {
   AccessRequestWithPeople,
   ProcessAccessRequest,
 } from "@/lib/api/domain/entities/AccessRequest";
-import { processAccessRequestSchema } from "@/lib/schemas/access-requests/processAcceptRequest";
+import { processAccessRequestSchema } from "@/lib/schemas/access-requests/processAcceptRequestSchema";
 import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { idSchema } from "@/lib/schemas/utils/idSchema";

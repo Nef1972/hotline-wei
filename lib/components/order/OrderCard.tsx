@@ -1,15 +1,14 @@
 "use client";
 
-import { Popconfirm, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { Order } from "@/lib/api/domain/entities/Order";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
 import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
+import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 
 type OrderCardProps = {
   order: Order;
@@ -34,11 +33,11 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      await axios.delete("/api/orders", { params: { id: order.id } });
+      await axios.delete(`/api/orders/${order.id}`);
     },
     onSuccess: () => {
       notification.success({ description: "Commande supprimée avec succès" });
-      queryClient.invalidateQueries({ queryKey: ["orders"] }).then();
+      queryClient.invalidateQueries({ queryKey: ["selfOrders"] }).then();
     },
     onError: (error) => {
       notification.error({
@@ -50,21 +49,12 @@ export const OrderCard = ({ order }: OrderCardProps) => {
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
       {!order.done && (
-        <Popconfirm
-          title="Supprimer cette commande ?"
-          description="Cette action est irréversible."
-          okText="Oui"
-          cancelText="Non"
+        <DeleteButton
+          popConfirmTitle={"Annuler cette commande ?"}
+          popConfirmDescription={"Cette action est irréversible."}
           placement="topRight"
           onConfirm={() => mutate()}
-        >
-          <button
-            className="absolute top-3 right-3 text-red-500 hover:text-red-700 cursor-pointer"
-            title="Supprimer"
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </Popconfirm>
+        />
       )}
 
       <Tooltip
@@ -77,10 +67,12 @@ export const OrderCard = ({ order }: OrderCardProps) => {
       <div className="flex justify-between items-center">
         <div>
           <div>
-            <span className="font-semibold">Créé le :</span> {createdAt}
+            <span className="font-semibold">Créé le : </span>
+            {createdAt}
           </div>
           <div>
-            <span className="font-semibold">Livraison le :</span> {deliverTime}
+            <span className="font-semibold">Livraison le : </span>
+            {deliverTime}
           </div>
         </div>
 

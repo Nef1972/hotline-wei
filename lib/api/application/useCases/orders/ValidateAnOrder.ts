@@ -3,7 +3,7 @@ import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { idSchema } from "@/lib/schemas/utils/idSchema";
 
-export const deleteAnOrder = async (
+export const validateAnOrder = async (
   repo: OrderRepository,
   params: { id: string },
 ) => {
@@ -11,5 +11,5 @@ export const deleteAnOrder = async (
 
   if (!parsed.success) throw new BadRequestError(joinZodErrors(parsed));
 
-  await repo.update(parsed.data, { deleted: true });
+  await repo.update(parsed.data, { done: true });
 };

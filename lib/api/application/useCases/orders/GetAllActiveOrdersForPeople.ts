@@ -3,10 +3,10 @@ import { Order } from "@/lib/api/domain/entities/Order";
 
 export const getAllActiveOrdersForPeople = async (
   repo: PeopleRepository,
-  params: { userId: string; onlyActive?: boolean },
+  params: { userId: string; orderDeleted?: boolean },
 ): Promise<Order[]> => {
   const peopleWithOrders = await repo.findWithOrdersByUserId(params.userId, {
-    onlyActive: params.onlyActive,
+    orderDeleted: params.orderDeleted,
   });
 
   return peopleWithOrders?.orders ?? [];

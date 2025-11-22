@@ -12,3 +12,5 @@ export type PeopleWithRole = People & {
 export type PeopleWithOrders = People & {
   orders: Order[];
 };
+
+export type NewPeople = Omit<People, "id" | "roleId">;

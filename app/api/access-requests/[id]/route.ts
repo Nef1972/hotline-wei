@@ -4,7 +4,7 @@ import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/Au
 import { processAccessRequest } from "@/lib/api/application/useCases/access-requests/ProcessAccessRequest";
 import { AccessRequestRepositoryImpl } from "@/lib/api/infrastructure/repositories/AccessRequestRepositoryImpl";
 
-export const POST = controller(
+export const PUT = controller(
   async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     await authenticateUserOrReject();
 

@@ -9,11 +9,14 @@ import {
 } from "@/lib/api/domain/entities/AccessRequest";
 
 export const AccessRequestRepositoryImpl: AccessRequestRepository = {
-  findAll: async (params: {
+  findAll: async (params?: {
     done?: boolean;
   }): Promise<AccessRequestWithPeople[]> => {
     return database.query.accessRequests.findMany({
-      where: eq(accessRequests.done, !!params.done),
+      where:
+        params?.done !== undefined
+          ? eq(accessRequests.done, params.done)
+          : undefined,
       with: { people: true },
     });
   },
@@ -26,7 +29,7 @@ export const AccessRequestRepositoryImpl: AccessRequestRepository = {
 
   findByUserId: async (
     userId: string,
-    params: {
+    params?: {
       done?: boolean;
     },
   ): Promise<AccessRequestWithPeople | undefined> =>
@@ -37,7 +40,9 @@ export const AccessRequestRepositoryImpl: AccessRequestRepository = {
 
       return tx.query.accessRequests.findFirst({
         where: and(
-          eq(accessRequests.done, !!params.done),
+          params?.done !== undefined
+            ? eq(accessRequests.done, params.done)
+            : undefined,
           eq(accessRequests.peopleId, people!.id),
         ),
         with: { people: true },

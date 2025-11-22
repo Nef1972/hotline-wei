@@ -2,7 +2,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { accessRequests } from "@/lib/db/schema";
 import { People } from "@/lib/api/domain/entities/People";
 import { z } from "zod";
-import { processAccessRequestSchema } from "@/lib/schemas/access-requests/processAcceptRequest";
+import { processAccessRequestSchema } from "@/lib/schemas/access-requests/processAcceptRequestSchema";
 
 export type AccessRequest = InferSelectModel<typeof accessRequests>;
 

@@ -1,14 +1,8 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import env from "@/lib/utils/env";
-import { database } from "@/lib/db";
-import { peoples } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import {
-  ClerkClaimsSchema,
-  clerkClaimsSchema,
-} from "@/lib/schemas/clerk/clerkClaimsSchema";
-import { z } from "zod";
-import { decodeToken } from "@/lib/utils/TokenUtils";
+import { getPeopleMatchingWithAnUserOrCreateIt } from "@/lib/api/application/useCases/peoples/GetPeopleMatchingWithAnUserOrCreateIt";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repositories/PeopleRepositoryImpl";
+import { handleError } from "@/lib/api/shared/http/handleError";
 
 export default clerkMiddleware(
   async (auth) => {
@@ -24,35 +18,13 @@ export default clerkMiddleware(
       return redirectToSignIn();
     }
 
-    const claims = decodeToken(token);
-
-    const parseResult = clerkClaimsSchema.safeParse(claims);
-
-    if (!parseResult.success) {
-      console.error("JWT claims invalid : ", z.treeifyError(parseResult.error));
-      return new Response(
-        `Invalid JWT claims : ${JSON.stringify(claims, null, 2)}`,
-        { status: 400 },
-      );
-    }
-
-    const {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-    } = parseResult.data as ClerkClaimsSchema;
-
-    const existingPeople = await database.query.peoples.findFirst({
-      where: eq(peoples.userId, userId),
-    });
-
-    if (!existingPeople) {
-      await database.insert(peoples).values({
+    try {
+      await getPeopleMatchingWithAnUserOrCreateIt(PeopleRepositoryImpl, {
         userId,
-        firstName,
-        lastName,
-        email,
+        token,
       });
+    } catch (error) {
+      return handleError(error);
     }
   },
   {

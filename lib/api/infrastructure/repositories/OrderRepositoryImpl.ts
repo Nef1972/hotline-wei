@@ -1,11 +1,29 @@
 import { database } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { orders, peoples } from "@/lib/db/schema";
-import { NewOrder, Order } from "@/lib/api/domain/entities/Order";
+import {
+  NewOrder,
+  Order,
+  OrderWithPeople,
+} from "@/lib/api/domain/entities/Order";
 import { OrderRepository } from "@/lib/api/domain/repositories/OrderRepository";
 import { People } from "@/lib/api/domain/entities/People";
 
 export const OrderRepositoryImpl: OrderRepository = {
+  findAll: async (params?: {
+    deleted?: boolean;
+    done?: boolean;
+  }): Promise<OrderWithPeople[]> =>
+    await database.query.orders.findMany({
+      where: and(
+        params?.deleted !== undefined
+          ? eq(orders.deleted, params.deleted)
+          : undefined,
+        params?.done !== undefined ? eq(orders.done, params.done) : undefined,
+      ),
+      with: { people: true },
+    }),
+
   create: async (
     userId: string,
     newOrder: NewOrder,
