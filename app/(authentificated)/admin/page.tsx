@@ -8,6 +8,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion";
+import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
+import { queryClient } from "@/lib/query/queryClient";
 
 enum TabItem {
   PEOPLES,
@@ -20,7 +22,18 @@ export default function AdminPage() {
   const tabItems = [
     {
       key: TabItem.PEOPLES,
-      label: "Demandes d'accès",
+      label: (
+        <div className="flex items-center justify-between">
+          <div>Demandes d&apos;accès</div>
+          {activeKey === TabItem.PEOPLES && (
+            <RefreshButton
+              onClick={() =>
+                queryClient.invalidateQueries({ queryKey: ["accessRequests"] })
+              }
+            />
+          )}
+        </div>
+      ),
       icon: faUsers,
       children: <AdminPeoplesGestion />,
     },
@@ -33,9 +46,9 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-[90vh] sm:h-[93vh]">
       <div className="flex flex-col w-1/6 bg-gray-100 dark:bg-zinc-900 p-4">
-        <div className="items-center gap-2 mb-6 hidden sm:flex">
+        <div className="items-center gap-2 mb-6 hidden md:flex">
           <FontAwesomeIcon icon={faUserTie} size={"2xl"} />
           <span className="text-xl font-semibold overflow-hidden whitespace-nowrap text-ellipsis text-black dark:text-white">
             Pannel administrateur
@@ -45,7 +58,7 @@ export default function AdminPage() {
         {tabItems.map((tab) => (
           <button
             key={tab.key}
-            className={`flex items-center justify-center sm:justify-normal gap-2 mb-2 px-3 py-2 rounded ${
+            className={`flex items-center justify-center md:justify-normal gap-2 mb-2 px-3 py-2 rounded ${
               activeKey === tab.key
                 ? "bg-zinc-500 dark:bg-zinc-600 text-white"
                 : "text-black dark:text-white hover:bg-zinc-200 hover:dark:bg-zinc-800"
@@ -53,7 +66,7 @@ export default function AdminPage() {
             onClick={() => setActiveKey(tab.key)}
           >
             <FontAwesomeIcon icon={tab.icon} />
-            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="hidden md:inline">{tab.label}</span>
           </button>
         ))}
       </div>

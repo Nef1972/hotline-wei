@@ -12,7 +12,7 @@ export function Navbar() {
   const { people } = usePeople();
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-indigo-600 dark:bg-indigo-950 text-white">
+    <nav className="flex items-center justify-between px-4 h-[10vh] sm:h-[7vh] bg-indigo-600 dark:bg-indigo-950 text-white">
       <div
         className="md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center gap-1 cursor-pointer"
         onClick={() => router.push("/")}
