@@ -6,11 +6,11 @@ import { faDoorOpen, faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 import { useClerk, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PeopleWithRole } from "@/lib/api/domain/entities/People";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { AccessRequest } from "@/lib/api/domain/entities/AccessRequest";
+import { AccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import useNotification from "@/lib/hooks/useNotification";
+import { PeopleWithRoleResponseDto } from "@/lib/api/http/people/PeopleResponseDto";
 
 export default function NotAllowedPage() {
   const { signOut } = useClerk();
@@ -28,7 +28,7 @@ export default function NotAllowedPage() {
       });
       if (!response.ok) return;
 
-      const people: PeopleWithRole = await response.json();
+      const people: PeopleWithRoleResponseDto = await response.json();
       if (people.role.hasAccess) {
         router.push("/");
       }

@@ -1,7 +1,7 @@
 import { peoples } from "@/lib/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { Role } from "@/lib/api/domain/entities/Role";
-import { Order } from "@/lib/api/domain/entities/Order";
+import { Role } from "@/lib/api/domain/entity/Role";
+import { Order } from "@/lib/api/domain/entity/Order";
 
 export type People = InferSelectModel<typeof peoples>;
 

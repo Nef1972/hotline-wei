@@ -1,5 +1,5 @@
-import { AccessRequestRepository } from "@/lib/api/domain/repositories/AccessRequestRepository";
-import { AccessRequest } from "@/lib/api/domain/entities/AccessRequest";
+import { AccessRequestRepository } from "@/lib/api/domain/repository/AccessRequestRepository";
+import { AccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 
 export const createNewAccessRequest = async (
   repo: AccessRequestRepository,

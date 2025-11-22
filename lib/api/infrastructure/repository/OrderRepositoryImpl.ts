@@ -5,9 +5,9 @@ import {
   NewOrder,
   Order,
   OrderWithPeople,
-} from "@/lib/api/domain/entities/Order";
-import { OrderRepository } from "@/lib/api/domain/repositories/OrderRepository";
-import { People } from "@/lib/api/domain/entities/People";
+} from "@/lib/api/domain/entity/Order";
+import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
+import { People } from "@/lib/api/domain/entity/People";
 
 export const OrderRepositoryImpl: OrderRepository = {
   findAll: async (params?: {

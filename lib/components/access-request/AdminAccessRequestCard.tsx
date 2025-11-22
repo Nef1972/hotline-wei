@@ -5,16 +5,14 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
-import {
-  AccessRequestWithPeople,
-  ProcessAccessRequest,
-} from "@/lib/api/domain/entities/AccessRequest";
+import { ProcessAccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import { useState } from "react";
 import { ValidateButton } from "@/lib/components/shared/buttons/ValidateButton";
 import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
+import { AccessRequestWithPeopleResponseDto } from "@/lib/api/http/access-request/AccessRequestResponseDto";
 
 type AccessRequestCardProps = {
-  accessRequest: AccessRequestWithPeople;
+  accessRequest: AccessRequestWithPeopleResponseDto;
 };
 
 export const AdminAccessRequestCard = ({

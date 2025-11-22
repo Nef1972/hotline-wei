@@ -3,7 +3,7 @@ import {
   People,
   PeopleWithOrders,
   PeopleWithRole,
-} from "@/lib/api/domain/entities/People";
+} from "@/lib/api/domain/entity/People";
 
 export interface PeopleRepository {
   findByUserId: (userId: string) => Promise<People | undefined>;

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
 import { controller } from "@/lib/api/shared/http/controller";
-import { getAllActiveOrdersForPeople } from "@/lib/api/application/useCases/orders/GetAllActiveOrdersForPeople";
-import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repositories/PeopleRepositoryImpl";
-import { Order } from "@/lib/api/domain/entities/Order";
+import { getAllActiveOrdersForPeople } from "@/lib/api/application/useCases/order/GetAllActiveOrdersForPeople";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
+import { Order } from "@/lib/api/domain/entity/Order";
 import { parseBooleanParam } from "@/lib/utils/QueryUtils";
 
 export const GET = controller(async (req: Request) => {

@@ -1,4 +1,4 @@
-import { PeopleRepository } from "@/lib/api/domain/repositories/PeopleRepository";
+import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
 import { database } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { orders, peoples } from "@/lib/db/schema";
@@ -7,7 +7,7 @@ import {
   People,
   PeopleWithOrders,
   PeopleWithRole,
-} from "@/lib/api/domain/entities/People";
+} from "@/lib/api/domain/entity/People";
 
 export const PeopleRepositoryImpl: PeopleRepository = {
   findByUserId: async (userId: string): Promise<People | undefined> =>

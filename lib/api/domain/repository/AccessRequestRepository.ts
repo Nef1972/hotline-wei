@@ -1,7 +1,7 @@
 import {
   AccessRequest,
   AccessRequestWithPeople,
-} from "@/lib/api/domain/entities/AccessRequest";
+} from "@/lib/api/domain/entity/AccessRequest";
 
 export interface AccessRequestRepository {
   findAll: (params?: { done?: boolean }) => Promise<AccessRequestWithPeople[]>;

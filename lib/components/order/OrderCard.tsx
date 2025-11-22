@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip } from "antd";
-import { Order } from "@/lib/api/domain/entities/Order";
+import { Order } from "@/lib/api/domain/entity/Order";
 import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
 import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";

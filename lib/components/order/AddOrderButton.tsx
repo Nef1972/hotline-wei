@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { NewOrder, Order } from "@/lib/api/domain/entities/Order";
+import { NewOrder, Order } from "@/lib/api/domain/entity/Order";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import AddOrderForm from "@/lib/components/order/AddOrderForm";
 import useNotification from "@/lib/hooks/useNotification";

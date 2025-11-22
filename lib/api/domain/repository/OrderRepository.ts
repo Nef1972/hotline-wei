@@ -2,7 +2,7 @@ import {
   NewOrder,
   Order,
   OrderWithPeople,
-} from "@/lib/api/domain/entities/Order";
+} from "@/lib/api/domain/entity/Order";
 
 export interface OrderRepository {
   findAll: (params?: {
