@@ -1,12 +1,12 @@
 import { database } from "@/lib/db";
 import { and, eq } from "drizzle-orm";
 import { accessRequests, peoples, roles } from "@/lib/db/schema";
-import { People } from "@/lib/api/domain/entities/People";
-import { AccessRequestRepository } from "@/lib/api/domain/repositories/AccessRequestRepository";
+import { People } from "@/lib/api/domain/entity/People";
+import { AccessRequestRepository } from "@/lib/api/domain/repository/AccessRequestRepository";
 import {
   AccessRequest,
   AccessRequestWithPeople,
-} from "@/lib/api/domain/entities/AccessRequest";
+} from "@/lib/api/domain/entity/AccessRequest";
 
 export const AccessRequestRepositoryImpl: AccessRequestRepository = {
   findAll: async (params?: {

@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
 import { controller } from "@/lib/api/shared/http/controller";
-import { Order } from "@/lib/api/domain/entities/Order";
-import { createNewOrder } from "@/lib/api/application/useCases/orders/CreateNewOrder";
-import { OrderRepositoryImpl } from "@/lib/api/infrastructure/repositories/OrderRepositoryImpl";
-import { getAllActiveOrdersWithCreator } from "@/lib/api/application/useCases/orders/GetAllActiveOrdersWithCreator";
+import { Order, OrderWithPeople } from "@/lib/api/domain/entity/Order";
+import { createNewOrder } from "@/lib/api/application/useCases/order/CreateNewOrder";
+import { OrderRepositoryImpl } from "@/lib/api/infrastructure/repository/OrderRepositoryImpl";
+import { getAllActiveOrdersWithCreator } from "@/lib/api/application/useCases/order/GetAllActiveOrdersWithCreator";
 import { parseBooleanParam } from "@/lib/utils/QueryUtils";
+import { OrderHttpMapper } from "@/lib/api/http/order/OrderHttpMapper";
 
 export const GET = controller(async (req: Request) => {
   await authenticateUserOrReject();
@@ -14,7 +15,7 @@ export const GET = controller(async (req: Request) => {
   const deleted = parseBooleanParam(url.searchParams.get("deleted"));
   const done = parseBooleanParam(url.searchParams.get("done"));
 
-  const orders: Order[] = await getAllActiveOrdersWithCreator(
+  const orders: OrderWithPeople[] = await getAllActiveOrdersWithCreator(
     OrderRepositoryImpl,
     {
       deleted,
@@ -22,7 +23,10 @@ export const GET = controller(async (req: Request) => {
     },
   );
 
-  return NextResponse.json(orders, { status: 200 });
+  return NextResponse.json(
+    OrderHttpMapper.toOrderWithPeopleResponseDtoList(orders),
+    { status: 200 },
+  );
 });
 
 export const POST = controller(async (req: Request) => {
@@ -30,7 +34,7 @@ export const POST = controller(async (req: Request) => {
 
   const body = await req.json();
 
-  const order = await createNewOrder(OrderRepositoryImpl, {
+  const order: Order | undefined = await createNewOrder(OrderRepositoryImpl, {
     userId,
     newOrder: body,
   });

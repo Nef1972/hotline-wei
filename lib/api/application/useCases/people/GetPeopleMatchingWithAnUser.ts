@@ -1,6 +1,6 @@
-import { PeopleRepository } from "@/lib/api/domain/repositories/PeopleRepository";
+import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
 import { NotFoundError } from "@/lib/api/shared/errors/NotFoundError";
-import { PeopleWithRole } from "@/lib/api/domain/entities/People";
+import { PeopleWithRole } from "@/lib/api/domain/entity/People";
 
 export const getPeopleMatchingWithAnUser = async (
   repo: PeopleRepository,

@@ -1,6 +1,6 @@
 "use client";
 
-import { PeopleWithRole } from "@/lib/api/domain/entities/People";
+import { PeopleWithRole } from "@/lib/api/domain/entity/People";
 import { createContext, ReactNode, useContext } from "react";
 
 type PeopleContextValue = {

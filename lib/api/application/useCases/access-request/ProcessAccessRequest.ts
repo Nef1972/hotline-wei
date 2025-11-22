@@ -1,8 +1,8 @@
-import { AccessRequestRepository } from "@/lib/api/domain/repositories/AccessRequestRepository";
+import { AccessRequestRepository } from "@/lib/api/domain/repository/AccessRequestRepository";
 import {
   AccessRequestWithPeople,
   ProcessAccessRequest,
-} from "@/lib/api/domain/entities/AccessRequest";
+} from "@/lib/api/domain/entity/AccessRequest";
 import { processAccessRequestSchema } from "@/lib/schemas/access-requests/processAcceptRequestSchema";
 import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
 import { joinZodErrors } from "@/lib/utils/StringUtils";

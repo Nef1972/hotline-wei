@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Spin } from "antd";
 import { AnimatePresence } from "framer-motion";
-import { OrderWithPeople } from "@/lib/api/domain/entities/Order";
 import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
 import { AdminOrderCard } from "@/lib/components/order/AdminOrderCard";
+import { OrderWithPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
 
 export const AdminOrdersGestion = () => {
   const { data: orders, isPending } = useQuery({
     queryKey: ["orders"],
-    queryFn: async (): Promise<OrderWithPeople[]> => {
+    queryFn: async (): Promise<OrderWithPeopleResponseDto[]> => {
       const response = await axios.get("/api/orders", {
         params: { deleted: false, done: false },
       });
@@ -27,7 +27,7 @@ export const AdminOrdersGestion = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <AnimatePresence>
-        {orders?.map((order: OrderWithPeople) => (
+        {orders?.map((order: OrderWithPeopleResponseDto) => (
           <AnimateCard key={order.id}>
             <AdminOrderCard order={order} />
           </AnimateCard>

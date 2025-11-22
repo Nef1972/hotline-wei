@@ -1,4 +1,4 @@
-import { PeopleRepository } from "@/lib/api/domain/repositories/PeopleRepository";
+import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
 import { decodeToken } from "@/lib/utils/TokenUtils";
 import {
   ClerkClaimsSchema,

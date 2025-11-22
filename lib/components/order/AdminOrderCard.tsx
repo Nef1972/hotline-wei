@@ -1,7 +1,6 @@
 "use client";
 
 import { Tooltip } from "antd";
-import { OrderWithPeople } from "@/lib/api/domain/entities/Order";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
@@ -10,9 +9,10 @@ import { ValidateButtonWithPopConfirm } from "@/lib/components/shared/buttons/Va
 import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OrderWithPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
 
 type OrderCardProps = {
-  order: OrderWithPeople;
+  order: OrderWithPeopleResponseDto;
 };
 
 export const AdminOrderCard = ({ order }: OrderCardProps) => {

@@ -1,5 +1,5 @@
-import { OrderWithPeople } from "@/lib/api/domain/entities/Order";
-import { OrderRepository } from "@/lib/api/domain/repositories/OrderRepository";
+import { OrderWithPeople } from "@/lib/api/domain/entity/Order";
+import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
 
 export const getAllActiveOrdersWithCreator = async (
   repo: OrderRepository,

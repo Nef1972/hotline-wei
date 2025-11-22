@@ -1,4 +1,4 @@
-import { AccessRequestRepository } from "@/lib/api/domain/repositories/AccessRequestRepository";
+import { AccessRequestRepository } from "@/lib/api/domain/repository/AccessRequestRepository";
 
 export const checkIfAccessRequestIsProcessingForUser = async (
   repo: AccessRequestRepository,

@@ -1,4 +1,4 @@
-import { OrderRepository } from "@/lib/api/domain/repositories/OrderRepository";
+import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
 import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { idSchema } from "@/lib/schemas/utils/idSchema";

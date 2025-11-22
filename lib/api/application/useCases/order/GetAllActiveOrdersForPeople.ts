@@ -1,5 +1,5 @@
-import { PeopleRepository } from "@/lib/api/domain/repositories/PeopleRepository";
-import { Order } from "@/lib/api/domain/entities/Order";
+import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
+import { Order } from "@/lib/api/domain/entity/Order";
 
 export const getAllActiveOrdersForPeople = async (
   repo: PeopleRepository,
