@@ -1,25 +1,33 @@
 import { Button, ButtonProps, ConfigProvider, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { PopconfirmProps } from "antd/es/popconfirm";
 
 type RefuseButtonProps = Omit<ButtonProps, "onClick"> & {
-  onConfirm?: () => void;
+  popConfirmTitle?: PopconfirmProps["title"];
+  popConfirmDescription?: PopconfirmProps["description"];
+  onConfirm?: PopconfirmProps["onConfirm"];
 };
 
-export const RefuseButton = ({ onConfirm, ...props }: RefuseButtonProps) => (
+export const ValidateButtonWithPopConfirm = ({
+  popConfirmTitle,
+  popConfirmDescription,
+  onConfirm,
+  ...props
+}: RefuseButtonProps) => (
   <ConfigProvider
     theme={{
       components: {
         Button: {
-          colorPrimary: "red",
+          colorPrimary: "darkgreen",
           controlOutline: "transparent",
         },
       },
     }}
   >
     <Popconfirm
-      title="Refuser cette demande ?"
-      description="Cette action est irréversible."
+      title={popConfirmTitle}
+      description={popConfirmDescription}
       okText="Oui"
       cancelText="Non"
       placement="topRight"
@@ -28,7 +36,7 @@ export const RefuseButton = ({ onConfirm, ...props }: RefuseButtonProps) => (
       <Button
         type="primary"
         shape="circle"
-        icon={<FontAwesomeIcon icon={faXmark} />}
+        icon={<FontAwesomeIcon icon={faCheck} />}
         {...props}
       ></Button>
     </Popconfirm>

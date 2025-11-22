@@ -3,6 +3,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBoxOpen,
+  faListCheck,
   faUsers,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
@@ -10,30 +11,21 @@ import { useState } from "react";
 import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion";
 import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
 import { queryClient } from "@/lib/query/queryClient";
+import { AdminOrdersGestion } from "@/lib/components/admin/AdminOrdersGestion";
 
 enum TabItem {
-  PEOPLES,
-  ORDERS,
+  ACCESS_REQUESTS = "accessRequests",
+  ORDERS = "orders",
+  PRODUCTS = "products",
 }
 
 export default function AdminPage() {
-  const [activeKey, setActiveKey] = useState<TabItem>(TabItem.PEOPLES);
+  const [activeKey, setActiveKey] = useState<TabItem>(TabItem.ACCESS_REQUESTS);
 
   const tabItems = [
     {
-      key: TabItem.PEOPLES,
-      label: (
-        <div className="flex items-center justify-between">
-          <div>Demandes d&apos;accès</div>
-          {activeKey === TabItem.PEOPLES && (
-            <RefreshButton
-              onClick={() =>
-                queryClient.invalidateQueries({ queryKey: ["accessRequests"] })
-              }
-            />
-          )}
-        </div>
-      ),
+      key: TabItem.ACCESS_REQUESTS,
+      label: "Demandes d'accès",
       icon: faUsers,
       children: <AdminPeoplesGestion />,
     },
@@ -41,7 +33,13 @@ export default function AdminPage() {
       key: TabItem.ORDERS,
       label: "Commandes",
       icon: faBoxOpen,
-      children: <div>Contenu des commandes</div>,
+      children: <AdminOrdersGestion />,
+    },
+    {
+      key: TabItem.PRODUCTS,
+      label: "Gestion des produits",
+      icon: faListCheck,
+      children: <div>Contenu des produits</div>,
     },
   ];
 
@@ -56,9 +54,9 @@ export default function AdminPage() {
         </div>
 
         {tabItems.map((tab) => (
-          <button
+          <div
             key={tab.key}
-            className={`flex items-center justify-center md:justify-normal gap-2 mb-2 px-3 py-2 rounded ${
+            className={`flex items-center justify-center md:justify-normal sm:h-[2.5rem] gap-2 mb-2 px-3 py-2 cursor-default rounded ${
               activeKey === tab.key
                 ? "bg-zinc-500 dark:bg-zinc-600 text-white"
                 : "text-black dark:text-white hover:bg-zinc-200 hover:dark:bg-zinc-800"
@@ -66,12 +64,23 @@ export default function AdminPage() {
             onClick={() => setActiveKey(tab.key)}
           >
             <FontAwesomeIcon icon={tab.icon} />
-            <span className="hidden md:inline">{tab.label}</span>
-          </button>
+            <div className="md:flex hidden justify-between w-full overflow-hidden whitespace-nowrap">
+              {tab.label}
+              {activeKey === tab.key && (
+                <RefreshButton
+                  onClick={() =>
+                    queryClient.invalidateQueries({
+                      queryKey: [tab.key],
+                    })
+                  }
+                />
+              )}
+            </div>
+          </div>
         ))}
       </div>
 
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-6 h-[90vh] sm:h-[93vh] overflow-y-auto">
         {tabItems.find((tab) => tab.key === activeKey)?.children}
       </div>
     </div>

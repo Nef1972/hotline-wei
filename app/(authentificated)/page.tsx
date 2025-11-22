@@ -10,16 +10,17 @@ import { SortToggle } from "@/lib/components/toolbar/SortToggle";
 import { SortType } from "@/lib/components/toolbar/SortType";
 import { SortDateType } from "@/lib/components/toolbar/SortDateType";
 import AddOrderButton from "@/lib/components/order/AddOrderButton";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
+import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
 
 export default function HomePage() {
   const { data: orders, isPending } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["selfOrders"],
     queryFn: async (): Promise<Order[]> => {
-      const response = await axios.get("/api/orders", {
-        params: { onlyActive: true },
+      const response = await axios.get("/api/orders/self", {
+        params: { orderDeleted: false },
       });
       return response.data;
     },
@@ -53,7 +54,7 @@ export default function HomePage() {
   }, [orders, statusFilter, sortField, ascending]);
 
   return (
-    <div className="w-full px-8 pt-5">
+    <div className="w-full px-8 pt-5 h-[90vh] sm:h-[93vh] overflow-y-auto">
       <div className="flex flex-wrap justify-center md:justify-between items-start mb-4 gap-x-2">
         <div className="flex flex-row items-center gap-1 mb-2">
           <FontAwesomeIcon icon={faBoxOpen} size={"2xl"} />
@@ -80,16 +81,9 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence>
             {filteredSortedOrders.map((order: Order) => (
-              <motion.div
-                key={order.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: -10 }}
-                transition={{ duration: 0.25 }}
-              >
-                <OrderCard key={order.id} order={order} />
-              </motion.div>
+              <AnimateCard key={order.id}>
+                <OrderCard order={order} />
+              </AnimateCard>
             ))}
           </AnimatePresence>
         </div>

@@ -28,7 +28,7 @@ export default function AddOrderButton() {
       notification.success({ description: "Commande enregistrée avec succès" });
       form.resetFields();
       setOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["orders"] }).then();
+      queryClient.invalidateQueries({ queryKey: ["selfOrders"] }).then();
     },
     onError: (error) => {
       notification.error({

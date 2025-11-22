@@ -4,11 +4,11 @@ import {
 } from "@/lib/api/domain/entities/AccessRequest";
 
 export interface AccessRequestRepository {
-  findAll: (params: { done?: boolean }) => Promise<AccessRequestWithPeople[]>;
+  findAll: (params?: { done?: boolean }) => Promise<AccessRequestWithPeople[]>;
   findById: (id: number) => Promise<AccessRequestWithPeople | undefined>;
   findByUserId: (
     userId: string,
-    params: { done?: boolean },
+    params?: { done?: boolean },
   ) => Promise<AccessRequestWithPeople | undefined>;
   create: (userId: string) => Promise<AccessRequest | undefined>;
   updateAccessRequestAndPromotePeopleIfApplicable: (

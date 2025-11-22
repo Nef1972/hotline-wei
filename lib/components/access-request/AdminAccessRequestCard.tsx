@@ -11,13 +11,13 @@ import {
 } from "@/lib/api/domain/entities/AccessRequest";
 import { useState } from "react";
 import { ValidateButton } from "@/lib/components/shared/buttons/ValidateButton";
-import { RefuseButton } from "@/lib/components/shared/buttons/RefuseButton";
+import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
 
 type AccessRequestCardProps = {
   accessRequest: AccessRequestWithPeople;
 };
 
-export const AccessRequestCard = ({
+export const AdminAccessRequestCard = ({
   accessRequest,
 }: AccessRequestCardProps) => {
   const notification = useNotification();
@@ -34,7 +34,7 @@ export const AccessRequestCard = ({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: ProcessAccessRequest) => {
-      await axios.post(`/api/access-requests/${accessRequest.id}`, data);
+      await axios.put(`/api/access-requests/${accessRequest.id}`, data);
     },
     onSuccess: () => {
       setIsSuccess(true);
@@ -76,7 +76,9 @@ export const AccessRequestCard = ({
             disabled={isPendingOrSuccess}
           />
 
-          <RefuseButton
+          <RefuseButtonWithPopConfirm
+            popConfirmTitle={"Refuser cette demande ?"}
+            popConfirmDescription={"Cette action est irréversible."}
             onConfirm={() => mutate({ isAccepted: false })}
             disabled={isPendingOrSuccess}
           />
