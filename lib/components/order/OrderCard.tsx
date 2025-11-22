@@ -49,21 +49,23 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
-      <Popconfirm
-        title="Supprimer cette commande ?"
-        description="Cette action est irréversible."
-        okText="Oui"
-        cancelText="Non"
-        placement="topRight"
-        onConfirm={() => mutate()}
-      >
-        <button
-          className="absolute top-3 right-3 text-red-500 hover:text-red-700 cursor-pointer"
-          title="Supprimer"
+      {!order.done && (
+        <Popconfirm
+          title="Supprimer cette commande ?"
+          description="Cette action est irréversible."
+          okText="Oui"
+          cancelText="Non"
+          placement="topRight"
+          onConfirm={() => mutate()}
         >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
-      </Popconfirm>
+          <button
+            className="absolute top-3 right-3 text-red-500 hover:text-red-700 cursor-pointer"
+            title="Supprimer"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </Popconfirm>
+      )}
 
       <Tooltip
         className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2 mb-4"
