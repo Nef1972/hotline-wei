@@ -4,10 +4,12 @@ import { Select } from "antd";
 import { AllTag } from "@/lib/components/shared/tags/AllTag";
 import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
 import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
+import { OrderToolbarStatusFilter } from "@/lib/components/type/OrderToolbarStatusFilter";
+import { Dispatch, SetStateAction } from "react";
 
 type SortTypeProps = {
-  statusFilter: "all" | "done" | "pending";
-  setStatusFilter: (status: "all" | "done" | "pending") => void;
+  statusFilter: OrderToolbarStatusFilter;
+  setStatusFilter: Dispatch<SetStateAction<OrderToolbarStatusFilter>>;
 };
 
 export const SortType = ({ statusFilter, setStatusFilter }: SortTypeProps) => {
@@ -17,9 +19,9 @@ export const SortType = ({ statusFilter, setStatusFilter }: SortTypeProps) => {
       value={statusFilter}
       onChange={(value) => setStatusFilter(value)}
       options={[
-        { label: <AllTag />, value: "all" },
-        { label: <DoneTag />, value: "done" },
-        { label: <InProgressTag />, value: "pending" },
+        { label: <AllTag />, value: "ALL" },
+        { label: <DoneTag />, value: "DONE" },
+        { label: <InProgressTag />, value: "IN_PROGRESS" },
       ]}
     />
   );

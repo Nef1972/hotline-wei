@@ -11,5 +11,5 @@ export const deleteAnOrder = async (
 
   if (!parsed.success) throw new BadRequestError(joinZodErrors(parsed));
 
-  await repo.update(parsed.data, { deleted: true });
+  await repo.update(parsed.data, { status: "DELETED" });
 };

@@ -1,26 +1,25 @@
 import { database } from "@/lib/db";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { orders, peoples } from "@/lib/db/schema";
 import {
   NewOrder,
   Order,
   OrderWithPeople,
+  Status,
 } from "@/lib/api/domain/entity/Order";
 import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
 import { People } from "@/lib/api/domain/entity/People";
+import { inArray } from "drizzle-orm/sql/expressions/conditions";
 
 export const OrderRepositoryImpl: OrderRepository = {
   findAll: async (params?: {
-    deleted?: boolean;
-    done?: boolean;
+    statuses?: Status[];
   }): Promise<OrderWithPeople[]> =>
     await database.query.orders.findMany({
-      where: and(
-        params?.deleted !== undefined
-          ? eq(orders.deleted, params.deleted)
+      where:
+        params?.statuses !== undefined
+          ? inArray(orders.status, params.statuses)
           : undefined,
-        params?.done !== undefined ? eq(orders.done, params.done) : undefined,
-      ),
       with: { people: true },
     }),
 

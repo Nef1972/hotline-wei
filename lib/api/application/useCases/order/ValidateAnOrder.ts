@@ -11,5 +11,5 @@ export const validateAnOrder = async (
 
   if (!parsed.success) throw new BadRequestError(joinZodErrors(parsed));
 
-  await repo.update(parsed.data, { done: true });
+  await repo.update(parsed.data, { status: "DONE" });
 };

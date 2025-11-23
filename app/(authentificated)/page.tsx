@@ -14,35 +14,33 @@ import { AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
+import { OrderToolbarStatusFilter } from "@/lib/components/type/OrderToolbarStatusFilter";
+import { OrderToolbarSortField } from "@/lib/components/type/OrderToolbarSortField";
 
 export default function HomePage() {
   const { data: orders, isPending } = useQuery({
     queryKey: ["selfOrders"],
     queryFn: async (): Promise<Order[]> => {
       const response = await axios.get("/api/orders/self", {
-        params: { orderDeleted: false },
+        params: { orderStatuses: "IN_PROGRESS,DONE" },
       });
       return response.data;
     },
   });
 
-  const [statusFilter, setStatusFilter] = useState<"all" | "done" | "pending">(
-    "all",
-  );
-  const [sortField, setSortField] = useState<"createdAt" | "deliverTime">(
-    "createdAt",
-  );
+  const [statusFilter, setStatusFilter] =
+    useState<OrderToolbarStatusFilter>("ALL");
+  const [sortField, setSortField] =
+    useState<OrderToolbarSortField>("createdAt");
   const [ascending, setAscending] = useState(true);
 
   const filteredSortedOrders = useMemo(() => {
     if (!orders) return [];
 
     const filtered =
-      statusFilter === "all"
+      statusFilter === "ALL"
         ? orders
-        : orders.filter((order) =>
-            statusFilter === "done" ? order.done : !order.done,
-          );
+        : orders.filter((order) => order.status === statusFilter);
 
     return [...filtered].sort((a, b) => {
       const aDate = new Date(a[sortField]);

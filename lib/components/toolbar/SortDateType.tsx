@@ -1,10 +1,12 @@
 "use client";
 
 import { Select } from "antd";
+import { OrderToolbarSortField } from "@/lib/components/type/OrderToolbarSortField";
+import { Dispatch, SetStateAction } from "react";
 
 type SortDateTypeProps = {
-  sortField: "createdAt" | "deliverTime";
-  setSortField: (value: "createdAt" | "deliverTime") => void;
+  sortField: OrderToolbarSortField;
+  setSortField: Dispatch<SetStateAction<OrderToolbarSortField>>;
 };
 
 export const SortDateType = ({

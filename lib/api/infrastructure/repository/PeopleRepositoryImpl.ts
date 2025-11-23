@@ -8,6 +8,8 @@ import {
   PeopleWithOrders,
   PeopleWithRole,
 } from "@/lib/api/domain/entity/People";
+import { Status } from "@/lib/api/domain/entity/Order";
+import { inArray } from "drizzle-orm/sql/expressions/conditions";
 
 export const PeopleRepositoryImpl: PeopleRepository = {
   findByUserId: async (userId: string): Promise<People | undefined> =>
@@ -25,17 +27,17 @@ export const PeopleRepositoryImpl: PeopleRepository = {
 
   findWithOrdersByUserId: async (
     userId: string,
-    params?: { orderDeleted?: boolean },
+    params?: { orderStatuses?: Status[] },
   ): Promise<PeopleWithOrders | undefined> =>
     database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),
       with: {
         orders:
-          params?.orderDeleted === undefined
-            ? true
-            : {
-                where: eq(orders.deleted, params.orderDeleted),
-              },
+          params?.orderStatuses && params.orderStatuses.length > 0
+            ? {
+                where: inArray(orders.status, params.orderStatuses),
+              }
+            : undefined,
       },
     }),
 

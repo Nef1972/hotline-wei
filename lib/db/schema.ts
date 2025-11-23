@@ -1,6 +1,7 @@
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   serial,
   text,
@@ -27,21 +28,26 @@ export const peoples = pgTable("peoples", {
     .notNull(),
 });
 
+export const orderStatusEnum = pgEnum("order_status", [
+  "IN_PROGRESS",
+  "DONE",
+  "DELETED",
+]);
+
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
   peopleId: integer("people_id")
     .references(() => peoples.id, { onDelete: "cascade" })
     .notNull(),
   description: text("description").default("No description").notNull(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
   deliverTime: timestamp("deliver_time", {
     mode: "date",
     withTimezone: true,
   }).notNull(),
-  done: boolean("done").default(false).notNull(),
-  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  deleted: boolean("deleted").default(false).notNull(),
+  status: orderStatusEnum("status").default("IN_PROGRESS").notNull(),
 });
 
 export const accessRequests = pgTable("access_requests", {
