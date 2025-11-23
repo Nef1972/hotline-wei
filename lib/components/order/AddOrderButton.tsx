@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Form, Modal } from "antd";
-import { useMutation } from "@tanstack/react-query";
+import { Button, Form, Modal, Spin } from "antd";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { NewOrder, Order } from "@/lib/api/domain/entity/Order";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
@@ -15,11 +15,24 @@ import { PlusCircleFilled } from "@ant-design/icons";
 export default function AddOrderButton() {
   const [open, setOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [selectedItemCategory, setSelectedItemCategory] = useState<number>();
   const [form] = Form.useForm();
 
   const notification = useNotification();
 
-  const { mutate, isPending } = useMutation({
+  const { data: itemCategories, isPending: isItemCategoriesPending } = useQuery(
+    {
+      queryKey: ["itemCategories"],
+      queryFn: async () => {
+        const res = await axios.get("/api/item-categories", {
+          params: { itemAvailable: "true" },
+        });
+        return res.data;
+      },
+    },
+  );
+
+  const { mutate: createOrder, isPending: isCreateOrderPending } = useMutation({
     mutationFn: async (data: NewOrder): Promise<Order> => {
       const res = await axios.post("/api/orders", data);
       return res.data;
@@ -40,7 +53,7 @@ export default function AddOrderButton() {
   const handleSubmit = async () => {
     const values = await form.validateFields();
     const parsed = createOrderSchema.safeParse({
-      description: values.description,
+      itemId: values.itemId,
       deliverTime: values.deliverTime?.toDate(),
     });
 
@@ -51,10 +64,10 @@ export default function AddOrderButton() {
       return;
     }
 
-    const { description, deliverTime } = parsed.data;
+    const { itemId, deliverTime } = parsed.data;
 
-    mutate({
-      description,
+    createOrder({
+      itemId,
       deliverTime,
     });
   };
@@ -82,12 +95,24 @@ export default function AddOrderButton() {
         onOk={handleSubmit}
         okText="Valider"
         cancelText="Annuler"
-        confirmLoading={isPending}
+        confirmLoading={isCreateOrderPending}
         okButtonProps={{ disabled: !isFormValid }}
         maskClosable={false}
         destroyOnHidden
       >
-        <AddOrderForm form={form} setIsFormValidAction={setIsFormValid} />
+        {isItemCategoriesPending ? (
+          <div className="flex justify-center p-4">
+            <Spin size={"large"} />
+          </div>
+        ) : (
+          <AddOrderForm
+            form={form}
+            setIsFormValidAction={setIsFormValid}
+            itemCategories={itemCategories}
+            selectedItemCategoryId={selectedItemCategory}
+            setSelectedItemCategoryId={setSelectedItemCategory}
+          />
+        )}
       </Modal>
     </>
   );

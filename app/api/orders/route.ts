@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
 import { controller } from "@/lib/api/shared/http/controller";
-import { Order, OrderWithPeople } from "@/lib/api/domain/entity/Order";
+import { Order, OrderWithItemAndPeople } from "@/lib/api/domain/entity/Order";
 import { createNewOrder } from "@/lib/api/application/useCases/order/CreateNewOrder";
 import { OrderRepositoryImpl } from "@/lib/api/infrastructure/repository/OrderRepositoryImpl";
 import { getAllActiveOrdersWithCreator } from "@/lib/api/application/useCases/order/GetAllActiveOrdersWithCreator";
@@ -13,7 +13,7 @@ export const GET = controller(async (req: Request) => {
   const url = new URL(req.url);
   const statuses = url.searchParams.get("statuses") ?? undefined;
 
-  const orders: OrderWithPeople[] = await getAllActiveOrdersWithCreator(
+  const orders: OrderWithItemAndPeople[] = await getAllActiveOrdersWithCreator(
     OrderRepositoryImpl,
     {
       statuses,

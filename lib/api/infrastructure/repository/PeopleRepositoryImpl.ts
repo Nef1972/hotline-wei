@@ -32,12 +32,13 @@ export const PeopleRepositoryImpl: PeopleRepository = {
     database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),
       with: {
-        orders:
-          params?.orderStatuses && params.orderStatuses.length > 0
-            ? {
-                where: inArray(orders.status, params.orderStatuses),
-              }
-            : undefined,
+        orders: {
+          where:
+            params?.orderStatuses && params.orderStatuses.length > 0
+              ? inArray(orders.status, params.orderStatuses)
+              : undefined,
+          with: { item: true },
+        },
       },
     }),
 

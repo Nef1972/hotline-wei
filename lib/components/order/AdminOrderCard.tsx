@@ -9,10 +9,10 @@ import { ValidateButtonWithPopConfirm } from "@/lib/components/shared/buttons/Va
 import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OrderWithPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
+import { OrderWithItemAndPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
 
 type OrderCardProps = {
-  order: OrderWithPeopleResponseDto;
+  order: OrderWithItemAndPeopleResponseDto;
 };
 
 export const AdminOrderCard = ({ order }: OrderCardProps) => {
@@ -59,9 +59,9 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
       <Tooltip
         className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2 mb-4"
-        title={order.description}
+        title={order.item.title}
       >
-        {order.description}
+        {order.item.title}
       </Tooltip>
 
       <div className="flex justify-between items-center">

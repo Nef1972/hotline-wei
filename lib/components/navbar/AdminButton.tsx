@@ -1,3 +1,5 @@
+"use client";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ConfigProvider } from "antd";
 import { faGears } from "@fortawesome/free-solid-svg-icons";

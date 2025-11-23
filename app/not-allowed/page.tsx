@@ -29,7 +29,7 @@ export default function NotAllowedPage() {
       if (!response.ok) return;
 
       const people: PeopleWithRoleResponseDto = await response.json();
-      if (people.role.hasAccess) {
+      if (people.role?.hasAccess) {
         router.push("/");
       }
     };
