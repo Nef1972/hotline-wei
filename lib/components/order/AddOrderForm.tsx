@@ -1,6 +1,6 @@
 "use client";
 
-import { DatePicker, Form, FormInstance, Select } from "antd";
+import { Cascader, DatePicker, Form, FormInstance } from "antd";
 import { Dispatch, SetStateAction } from "react";
 import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
 import { Item } from "@/lib/api/domain/entity/Item";
@@ -9,16 +9,12 @@ type AddOrderFormProps = {
   form: FormInstance;
   setIsFormValidAction: Dispatch<SetStateAction<boolean>>;
   itemCategories: ItemCategoryWithItems[];
-  selectedItemCategoryId: number | undefined;
-  setSelectedItemCategoryId: Dispatch<SetStateAction<number | undefined>>;
 };
 
 export default function AddOrderForm({
   form,
   setIsFormValidAction,
   itemCategories,
-  selectedItemCategoryId,
-  setSelectedItemCategoryId,
 }: AddOrderFormProps) {
   const onFieldsChange = () => {
     const hasErrors = form
@@ -28,48 +24,47 @@ export default function AddOrderForm({
     setIsFormValidAction(!hasErrors && allTouched);
   };
 
-  const selectedCategory = itemCategories?.find(
-    (itemCategory) => itemCategory.id === selectedItemCategoryId,
-  );
+  type CascaderOption = {
+    value: number;
+    label: string;
+    children?: CascaderOption[];
+  };
+
+  const cascaderOptions: CascaderOption[] = itemCategories
+    .filter(
+      (itemCategory) => itemCategory.items && itemCategory.items.length > 0,
+    )
+    .map((itemCategory) => ({
+      label: itemCategory.title,
+      value: itemCategory.id,
+      children: itemCategory.items.map((item: Item) => ({
+        label: item.title,
+        value: item.id,
+      })),
+    }));
 
   return (
     <Form layout="vertical" form={form} onFieldsChange={onFieldsChange}>
       <Form.Item
-        label="Catégorie"
-        name="categoryId"
-        rules={[{ required: true, message: "Veuillez choisir une catégorie" }]}
-      >
-        <Select
-          placeholder="Choisir une catégorie"
-          options={itemCategories.map((itemCategory) => ({
-            label: itemCategory.title,
-            value: itemCategory.id,
-          }))}
-          onChange={(id) => {
-            setSelectedItemCategoryId(id);
-            form.setFieldValue("itemId", undefined);
-          }}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label="Article"
+        label="Choix de l'article"
         name="itemId"
         rules={[{ required: true, message: "Veuillez choisir un article" }]}
+        normalize={(value: number[] | undefined) =>
+          value ? value[value.length - 1] : undefined
+        }
+        getValueProps={(itemId: number | undefined) => {
+          if (!itemId) return { value: undefined };
+          const category = cascaderOptions.find((option) =>
+            option.children?.some((child) => child.value === itemId),
+          );
+          return { value: category ? [category.value, itemId] : undefined };
+        }}
       >
-        <Select
-          placeholder={
-            selectedItemCategoryId
-              ? "Choisir un article"
-              : "Sélectionnez une catégorie d'abord"
-          }
-          disabled={!selectedItemCategoryId}
-          options={
-            selectedCategory?.items.map((item: Item) => ({
-              label: item.title,
-              value: item.id,
-            })) ?? []
-          }
+        <Cascader
+          placeholder="Choisir un article"
+          expandTrigger="hover"
+          options={cascaderOptions}
+          displayRender={(labels) => labels[labels.length - 1]}
         />
       </Form.Item>
 

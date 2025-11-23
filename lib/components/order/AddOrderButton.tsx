@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Form, Modal, Spin } from "antd";
+import { Button, Form, Modal } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { NewOrder, Order } from "@/lib/api/domain/entity/Order";
@@ -15,22 +15,24 @@ import { PlusCircleFilled } from "@ant-design/icons";
 export default function AddOrderButton() {
   const [open, setOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [selectedItemCategory, setSelectedItemCategory] = useState<number>();
   const [form] = Form.useForm();
 
   const notification = useNotification();
 
-  const { data: itemCategories, isPending: isItemCategoriesPending } = useQuery(
-    {
-      queryKey: ["itemCategories"],
-      queryFn: async () => {
-        const res = await axios.get("/api/item-categories", {
-          params: { itemAvailable: "true" },
-        });
-        return res.data;
-      },
+  const {
+    data: itemCategories,
+    isPending: isItemCategoriesPending,
+    refetch: fetchCategories,
+  } = useQuery({
+    queryKey: ["itemCategories"],
+    queryFn: async () => {
+      const res = await axios.get("/api/item-categories", {
+        params: { itemAvailable: "true" },
+      });
+      return res.data;
     },
-  );
+    enabled: false,
+  });
 
   const { mutate: createOrder, isPending: isCreateOrderPending } = useMutation({
     mutationFn: async (data: NewOrder): Promise<Order> => {
@@ -77,13 +79,18 @@ export default function AddOrderButton() {
     setOpen(false);
   };
 
+  const onAddCommandClick = () => {
+    fetchCategories().then();
+    setOpen(true);
+  };
+
   return (
     <>
       <Button
         size="large"
         type="primary"
         icon={<PlusCircleFilled />}
-        onClick={() => setOpen(true)}
+        onClick={onAddCommandClick}
       >
         Ajouter une commande
       </Button>
@@ -100,19 +107,11 @@ export default function AddOrderButton() {
         maskClosable={false}
         destroyOnHidden
       >
-        {isItemCategoriesPending ? (
-          <div className="flex justify-center p-4">
-            <Spin size={"large"} />
-          </div>
-        ) : (
-          <AddOrderForm
-            form={form}
-            setIsFormValidAction={setIsFormValid}
-            itemCategories={itemCategories}
-            selectedItemCategoryId={selectedItemCategory}
-            setSelectedItemCategoryId={setSelectedItemCategory}
-          />
-        )}
+        <AddOrderForm
+          form={form}
+          setIsFormValidAction={setIsFormValid}
+          itemCategories={isItemCategoriesPending ? [] : itemCategories}
+        />
       </Modal>
     </>
   );

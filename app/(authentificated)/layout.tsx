@@ -2,12 +2,11 @@
 
 import { ReactNode } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { database } from "@/lib/db";
-import { eq } from "drizzle-orm";
-import { peoples } from "@/lib/db/schema";
 import { PeopleProvider } from "@/lib/contexts/PeopleContext";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/lib/components/navbar/Navbar";
+import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUser";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
 
 export default async function AuthentificatedLayout({
   children,
@@ -16,9 +15,8 @@ export default async function AuthentificatedLayout({
 }) {
   const { userId } = await auth();
 
-  const people = await database.query.peoples.findFirst({
-    where: eq(peoples.userId, userId!),
-    with: { role: true },
+  const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
+    userId: userId!,
   });
 
   if (!people?.role?.hasAccess) {

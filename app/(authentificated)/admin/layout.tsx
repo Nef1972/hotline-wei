@@ -3,9 +3,8 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { database } from "@/lib/db";
-import { eq } from "drizzle-orm";
-import { peoples } from "@/lib/db/schema";
+import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUser";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
 
 export default async function AdminLayout({
   children,
@@ -14,9 +13,8 @@ export default async function AdminLayout({
 }) {
   const { userId } = await auth();
 
-  const people = await database.query.peoples.findFirst({
-    where: eq(peoples.userId, userId!),
-    with: { role: true },
+  const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
+    userId: userId!,
   });
 
   if (!people?.role?.hasFullAccess) {
