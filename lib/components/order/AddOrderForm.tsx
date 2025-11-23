@@ -1,9 +1,9 @@
 "use client";
 
-import { Cascader, DatePicker, Form, FormInstance } from "antd";
-import { Dispatch, SetStateAction } from "react";
-import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
-import { Item } from "@/lib/api/domain/entity/Item";
+import {Cascader, DatePicker, Form, FormInstance} from "antd";
+import {Dispatch, SetStateAction} from "react";
+import {ItemCategoryWithItems} from "@/lib/api/domain/entity/ItemCategory";
+import {Item} from "@/lib/api/domain/entity/Item";
 
 type AddOrderFormProps = {
   form: FormInstance;
@@ -75,8 +75,15 @@ export default function AddOrderForm({
       >
         <DatePicker
           className="w-full"
+          styles={{
+              popup: {
+                  root: { zIndex: 1050 },
+              },
+          }}
+          placeholder="Choisir une date et une heure"
           showTime={{ format: "HH:mm" }}
           format="DD-MM-YYYY HH:mm"
+          inputReadOnly
         />
       </Form.Item>
     </Form>
