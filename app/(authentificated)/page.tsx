@@ -1,55 +1,55 @@
 "use client";
 
-import { Spin } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import {Spin} from "antd";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
-import { useMemo, useState } from "react";
-import { Order } from "@/lib/api/domain/entity/Order";
-import { OrderCard } from "@/lib/components/order/OrderCard";
-import { SortToggle } from "@/lib/components/toolbar/SortToggle";
-import { SortType } from "@/lib/components/toolbar/SortType";
-import { SortDateType } from "@/lib/components/toolbar/SortDateType";
+import {useMemo, useState} from "react";
+import {Order} from "@/lib/api/domain/entity/Order";
+import {OrderCard} from "@/lib/components/order/OrderCard";
+import {SortToggle} from "@/lib/components/toolbar/SortToggle";
+import {SortType} from "@/lib/components/toolbar/SortType";
+import {SortDateType} from "@/lib/components/toolbar/SortDateType";
 import AddOrderButton from "@/lib/components/order/AddOrderButton";
-import { AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
-import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
-import { OrderToolbarStatusFilter } from "@/lib/components/type/OrderToolbarStatusFilter";
-import { OrderToolbarSortField } from "@/lib/components/type/OrderToolbarSortField";
+import {AnimatePresence} from "framer-motion";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBoxOpen} from "@fortawesome/free-solid-svg-icons";
+import {AnimateCard} from "@/lib/components/shared/animation/AnimateCard";
+import {OrderToolbarStatusFilter} from "@/lib/components/type/OrderToolbarStatusFilter";
+import {OrderToolbarSortField} from "@/lib/components/type/OrderToolbarSortField";
 
 export default function HomePage() {
-  const { data: orders, isPending } = useQuery({
-    queryKey: ["selfOrders"],
-    queryFn: async (): Promise<Order[]> => {
-      const response = await axios.get("/api/orders/self", {
-        params: { orderStatuses: "IN_PROGRESS,DONE" },
-      });
-      return response.data;
-    },
-  });
-
   const [statusFilter, setStatusFilter] =
     useState<OrderToolbarStatusFilter>("ALL");
   const [sortField, setSortField] =
     useState<OrderToolbarSortField>("createdAt");
   const [ascending, setAscending] = useState(true);
 
+  const queryParams =
+    statusFilter !== "ALL"
+      ? { orderStatuses: statusFilter }
+      : { orderStatuses: "IN_PROGRESS,DONE" };
+
+  const { data: orders, isPending } = useQuery({
+    queryKey: ["selfOrders", statusFilter],
+    queryFn: async (): Promise<Order[]> => {
+      const response = await axios.get("/api/orders/self", {
+        params: queryParams,
+      });
+      return response.data;
+    },
+  });
+
   const filteredSortedOrders = useMemo(() => {
     if (!orders) return [];
 
-    const filtered =
-      statusFilter === "ALL"
-        ? orders
-        : orders.filter((order) => order.status === statusFilter);
-
-    return [...filtered].sort((a, b) => {
+    return [...orders].sort((a, b) => {
       const aDate = new Date(a[sortField]);
       const bDate = new Date(b[sortField]);
       return ascending
         ? aDate.getTime() - bDate.getTime()
         : bDate.getTime() - aDate.getTime();
     });
-  }, [orders, statusFilter, sortField, ascending]);
+  }, [orders, sortField, ascending]);
 
   return (
     <div className="w-full px-8 pt-5 h-[90vh] sm:h-[93vh] overflow-y-auto">

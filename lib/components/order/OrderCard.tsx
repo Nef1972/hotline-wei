@@ -9,6 +9,7 @@ import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
+import { DeletedTag } from "@/lib/components/shared/tags/DeletedTag";
 
 type OrderCardProps = {
   order: Order;
@@ -16,20 +17,6 @@ type OrderCardProps = {
 
 export const OrderCard = ({ order }: OrderCardProps) => {
   const notification = useNotification();
-
-  const createdAt = new Date(order.createdAt).toLocaleString("fr-FR", {
-    day: "2-digit",
-    month: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const deliverTime = new Date(order.deliverTime).toLocaleString("fr-FR", {
-    day: "2-digit",
-    month: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -45,6 +32,33 @@ export const OrderCard = ({ order }: OrderCardProps) => {
       });
     },
   });
+
+  const createdAt = new Date(order.createdAt).toLocaleString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const deliverTime = new Date(order.deliverTime).toLocaleString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const statusTag = () => {
+    switch (order.status) {
+      case "DONE":
+        return <DoneTag />;
+      case "IN_PROGRESS":
+        return <InProgressTag />;
+      case "DELETED":
+        return <DeletedTag />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
@@ -76,7 +90,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
           </div>
         </div>
 
-        <div>{order.status === "DONE" ? <DoneTag /> : <InProgressTag />}</div>
+        <div>{statusTag()}</div>
       </div>
     </div>
   );
