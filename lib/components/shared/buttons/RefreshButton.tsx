@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, ButtonProps } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";

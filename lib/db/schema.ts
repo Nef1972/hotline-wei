@@ -22,10 +22,24 @@ export const peoples = pgTable("peoples", {
   lastName: text("lastName").default("").notNull(),
   email: text("email").default("").notNull(),
   userId: text("user_id").notNull(),
-  roleId: integer("role_id")
-    .default(1)
-    .references(() => roles.id, { onDelete: "set default" })
-    .notNull(),
+  roleId: integer("role_id").references(() => roles.id, {
+    onDelete: "set null",
+  }),
+});
+
+export const itemCategories = pgTable("item_categories", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+});
+
+export const items = pgTable("items", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  itemCategoryId: integer("item_category_id").references(
+    () => itemCategories.id,
+    { onDelete: "set null" },
+  ),
+  available: boolean("available").default(true).notNull(),
 });
 
 export const orderStatusEnum = pgEnum("order_status", [
@@ -39,7 +53,11 @@ export const orders = pgTable("orders", {
   peopleId: integer("people_id")
     .references(() => peoples.id, { onDelete: "cascade" })
     .notNull(),
-  description: text("description").default("No description").notNull(),
+  itemId: integer("item_id")
+    .references(() => items.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
   createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -74,10 +92,26 @@ export const peopleRelations = relations(peoples, ({ one, many }) => ({
   accessRequests: many(accessRequests),
 }));
 
+export const itemCategoryRelations = relations(itemCategories, ({ many }) => ({
+  items: many(items),
+}));
+
+export const itemRelations = relations(items, ({ one, many }) => ({
+  itemCategory: one(itemCategories, {
+    fields: [items.itemCategoryId],
+    references: [itemCategories.id],
+  }),
+  orders: many(orders),
+}));
+
 export const orderRelations = relations(orders, ({ one }) => ({
   people: one(peoples, {
     fields: [orders.peopleId],
     references: [peoples.id],
+  }),
+  item: one(items, {
+    fields: [orders.itemId],
+    references: [items.id],
   }),
 }));
 

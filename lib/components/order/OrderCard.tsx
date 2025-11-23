@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip } from "antd";
-import { Order } from "@/lib/api/domain/entity/Order";
+import { OrderWithItem } from "@/lib/api/domain/entity/Order";
 import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
 import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 import { DeletedTag } from "@/lib/components/shared/tags/DeletedTag";
 
 type OrderCardProps = {
-  order: Order;
+  order: OrderWithItem;
 };
 
 export const OrderCard = ({ order }: OrderCardProps) => {
@@ -73,9 +73,9 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
       <Tooltip
         className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2 mb-4"
-        title={order.description}
+        title={order.item.title}
       >
-        {order.description}
+        {order.item.title}
       </Tooltip>
 
       <div className="flex justify-between items-center">

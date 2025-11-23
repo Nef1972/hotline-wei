@@ -4,7 +4,7 @@ import { orders, peoples } from "@/lib/db/schema";
 import {
   NewOrder,
   Order,
-  OrderWithPeople,
+  OrderWithItemAndPeople,
   Status,
 } from "@/lib/api/domain/entity/Order";
 import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
@@ -14,13 +14,13 @@ import { inArray } from "drizzle-orm/sql/expressions/conditions";
 export const OrderRepositoryImpl: OrderRepository = {
   findAll: async (params?: {
     statuses?: Status[];
-  }): Promise<OrderWithPeople[]> =>
+  }): Promise<OrderWithItemAndPeople[]> =>
     await database.query.orders.findMany({
       where:
         params?.statuses !== undefined
           ? inArray(orders.status, params.statuses)
           : undefined,
-      with: { people: true },
+      with: { people: true, item: true },
     }),
 
   create: async (
@@ -36,7 +36,7 @@ export const OrderRepositoryImpl: OrderRepository = {
         .insert(orders)
         .values({
           peopleId: people!.id,
-          description: newOrder.description,
+          itemId: newOrder.itemId,
           deliverTime: newOrder.deliverTime,
         })
         .returning();

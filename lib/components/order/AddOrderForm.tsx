@@ -1,16 +1,24 @@
 "use client";
 
-import { DatePicker, Form, FormInstance, Input } from "antd";
+import { DatePicker, Form, FormInstance, Select } from "antd";
 import { Dispatch, SetStateAction } from "react";
+import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
+import { Item } from "@/lib/api/domain/entity/Item";
 
 type AddOrderFormProps = {
   form: FormInstance;
   setIsFormValidAction: Dispatch<SetStateAction<boolean>>;
+  itemCategories: ItemCategoryWithItems[];
+  selectedItemCategoryId: number | undefined;
+  setSelectedItemCategoryId: Dispatch<SetStateAction<number | undefined>>;
 };
 
 export default function AddOrderForm({
   form,
   setIsFormValidAction,
+  itemCategories,
+  selectedItemCategoryId,
+  setSelectedItemCategoryId,
 }: AddOrderFormProps) {
   const onFieldsChange = () => {
     const hasErrors = form
@@ -20,16 +28,49 @@ export default function AddOrderForm({
     setIsFormValidAction(!hasErrors && allTouched);
   };
 
+  const selectedCategory = itemCategories?.find(
+    (itemCategory) => itemCategory.id === selectedItemCategoryId,
+  );
+
   return (
     <Form layout="vertical" form={form} onFieldsChange={onFieldsChange}>
       <Form.Item
-        label="Description"
-        name="description"
-        rules={[
-          { required: true, message: "Veuillez ajouter une description" },
-        ]}
+        label="Catégorie"
+        name="categoryId"
+        rules={[{ required: true, message: "Veuillez choisir une catégorie" }]}
       >
-        <Input placeholder="Ex : Une bouteille de Vodka" />
+        <Select
+          placeholder="Choisir une catégorie"
+          options={itemCategories.map((itemCategory) => ({
+            label: itemCategory.title,
+            value: itemCategory.id,
+          }))}
+          onChange={(id) => {
+            setSelectedItemCategoryId(id);
+            form.setFieldValue("itemId", undefined);
+          }}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Article"
+        name="itemId"
+        rules={[{ required: true, message: "Veuillez choisir un article" }]}
+      >
+        <Select
+          placeholder={
+            selectedItemCategoryId
+              ? "Choisir un article"
+              : "Sélectionnez une catégorie d'abord"
+          }
+          disabled={!selectedItemCategoryId}
+          options={
+            selectedCategory?.items.map((item: Item) => ({
+              label: item.title,
+              value: item.id,
+            })) ?? []
+          }
+        />
       </Form.Item>
 
       <Form.Item
@@ -40,7 +81,7 @@ export default function AddOrderForm({
         <DatePicker
           className="w-full"
           showTime={{ format: "HH:mm" }}
-          format="DD-MM-YYYY   HH:mm"
+          format="DD-MM-YYYY HH:mm"
         />
       </Form.Item>
     </Form>

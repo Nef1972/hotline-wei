@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, ButtonProps, ConfigProvider, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";

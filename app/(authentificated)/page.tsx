@@ -1,21 +1,21 @@
 "use client";
 
-import {Spin} from "antd";
-import {useQuery} from "@tanstack/react-query";
+import { Spin } from "antd";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {useMemo, useState} from "react";
-import {Order} from "@/lib/api/domain/entity/Order";
-import {OrderCard} from "@/lib/components/order/OrderCard";
-import {SortToggle} from "@/lib/components/toolbar/SortToggle";
-import {SortType} from "@/lib/components/toolbar/SortType";
-import {SortDateType} from "@/lib/components/toolbar/SortDateType";
+import { useMemo, useState } from "react";
+import { OrderWithItem } from "@/lib/api/domain/entity/Order";
+import { OrderCard } from "@/lib/components/order/OrderCard";
+import { SortToggle } from "@/lib/components/toolbar/SortToggle";
+import { SortType } from "@/lib/components/toolbar/SortType";
+import { SortDateType } from "@/lib/components/toolbar/SortDateType";
 import AddOrderButton from "@/lib/components/order/AddOrderButton";
-import {AnimatePresence} from "framer-motion";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBoxOpen} from "@fortawesome/free-solid-svg-icons";
-import {AnimateCard} from "@/lib/components/shared/animation/AnimateCard";
-import {OrderToolbarStatusFilter} from "@/lib/components/type/OrderToolbarStatusFilter";
-import {OrderToolbarSortField} from "@/lib/components/type/OrderToolbarSortField";
+import { AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
+import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
+import { OrderToolbarStatusFilter } from "@/lib/components/type/OrderToolbarStatusFilter";
+import { OrderToolbarSortField } from "@/lib/components/type/OrderToolbarSortField";
 
 export default function HomePage() {
   const [statusFilter, setStatusFilter] =
@@ -31,7 +31,7 @@ export default function HomePage() {
 
   const { data: orders, isPending } = useQuery({
     queryKey: ["selfOrders", statusFilter],
-    queryFn: async (): Promise<Order[]> => {
+    queryFn: async (): Promise<OrderWithItem[]> => {
       const response = await axios.get("/api/orders/self", {
         params: queryParams,
       });
@@ -78,7 +78,7 @@ export default function HomePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence>
-            {filteredSortedOrders.map((order: Order) => (
+            {filteredSortedOrders.map((order: OrderWithItem) => (
               <AnimateCard key={order.id}>
                 <OrderCard order={order} />
               </AnimateCard>

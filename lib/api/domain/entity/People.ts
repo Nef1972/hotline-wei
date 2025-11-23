@@ -1,16 +1,16 @@
 import { peoples } from "@/lib/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { Role } from "@/lib/api/domain/entity/Role";
-import { Order } from "@/lib/api/domain/entity/Order";
+import { OrderWithItem } from "@/lib/api/domain/entity/Order";
 
 export type People = InferSelectModel<typeof peoples>;
 
 export type PeopleWithRole = People & {
-  role: Role;
+  role: Role | null;
 };
 
 export type PeopleWithOrders = People & {
-  orders: Order[];
+  orders: OrderWithItem[];
 };
 
 export type NewPeople = Omit<People, "id" | "roleId">;
