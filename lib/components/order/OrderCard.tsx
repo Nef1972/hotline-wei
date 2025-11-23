@@ -48,7 +48,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
-      {!order.done && (
+      {order.status === "IN_PROGRESS" && (
         <DeleteButton
           popConfirmTitle={"Annuler cette commande ?"}
           popConfirmDescription={"Cette action est irréversible."}
@@ -76,7 +76,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
           </div>
         </div>
 
-        <div>{order.done ? <DoneTag /> : <InProgressTag />}</div>
+        <div>{order.status === "DONE" ? <DoneTag /> : <InProgressTag />}</div>
       </div>
     </div>
   );

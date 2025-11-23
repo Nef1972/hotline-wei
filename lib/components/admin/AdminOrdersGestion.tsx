@@ -11,7 +11,7 @@ export const AdminOrdersGestion = () => {
     queryKey: ["orders"],
     queryFn: async (): Promise<OrderWithPeopleResponseDto[]> => {
       const response = await axios.get("/api/orders", {
-        params: { deleted: false, done: false },
+        params: { statuses: "IN_PROGRESS" },
       });
       return response.data;
     },

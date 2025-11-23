@@ -1,5 +1,5 @@
 import { InferSelectModel } from "drizzle-orm";
-import { orders } from "@/lib/db/schema";
+import { orders, orderStatusEnum } from "@/lib/db/schema";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import { z } from "zod";
 import { People } from "@/lib/api/domain/entity/People";
@@ -11,3 +11,5 @@ export type OrderWithPeople = Order & {
 };
 
 export type NewOrder = z.infer<typeof createOrderSchema>;
+
+export type Status = (typeof orderStatusEnum.enumValues)[number];

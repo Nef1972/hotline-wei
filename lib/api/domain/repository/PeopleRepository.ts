@@ -4,6 +4,7 @@ import {
   PeopleWithOrders,
   PeopleWithRole,
 } from "@/lib/api/domain/entity/People";
+import { Status } from "@/lib/api/domain/entity/Order";
 
 export interface PeopleRepository {
   findByUserId: (userId: string) => Promise<People | undefined>;
@@ -12,7 +13,7 @@ export interface PeopleRepository {
   ) => Promise<PeopleWithRole | undefined>;
   findWithOrdersByUserId: (
     userId: string,
-    params?: { orderDeleted?: boolean },
+    params?: { orderStatuses?: Status[] },
   ) => Promise<PeopleWithOrders | undefined>;
   create: (people: NewPeople) => Promise<People | undefined>;
 }

@@ -10,10 +10,9 @@ export class OrderHttpMapper {
       id: order.id,
       peopleId: order.peopleId,
       description: order.description,
-      deliverTime: order.deliverTime,
-      done: order.done,
       createdAt: order.createdAt,
-      deleted: order.deleted,
+      deliverTime: order.deliverTime,
+      status: order.status,
       people: PeopleHttpMapper.toPeopleResponseDto(order.people),
     };
   }
