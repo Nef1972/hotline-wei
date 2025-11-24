@@ -4,7 +4,7 @@ import { validateAnOrder } from "@/lib/api/application/useCases/order/ValidateAn
 import { OrderRepositoryImpl } from "@/lib/api/infrastructure/repository/OrderRepositoryImpl";
 import { NextResponse } from "next/server";
 
-export const PUT = controller(
+export const PATCH = controller(
   async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
     await authenticateUserOrReject();
 

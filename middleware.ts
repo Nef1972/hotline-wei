@@ -2,7 +2,6 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 import env from "@/lib/utils/env";
 import { getPeopleMatchingWithAnUserOrCreateIt } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUserOrCreateIt";
 import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
-import { handleError } from "@/lib/api/shared/http/handleError";
 
 export default clerkMiddleware(
   async (auth) => {
@@ -18,14 +17,10 @@ export default clerkMiddleware(
       return redirectToSignIn();
     }
 
-    try {
-      await getPeopleMatchingWithAnUserOrCreateIt(PeopleRepositoryImpl, {
-        userId,
-        token,
-      });
-    } catch (error) {
-      return handleError(error);
-    }
+    await getPeopleMatchingWithAnUserOrCreateIt(PeopleRepositoryImpl, {
+      userId,
+      token,
+    });
   },
   {
     authorizedParties: [env.appUrl],

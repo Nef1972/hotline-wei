@@ -1,6 +1,6 @@
 "use client";
 
-import { Tooltip } from "antd";
+import { Spin, Tooltip } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/query/queryClient";
@@ -10,6 +10,7 @@ import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/Refu
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OrderWithItemAndPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
+import { useState } from "react";
 
 type OrderCardProps = {
   order: OrderWithItemAndPeopleResponseDto;
@@ -17,6 +18,7 @@ type OrderCardProps = {
 
 export const AdminOrderCard = ({ order }: OrderCardProps) => {
   const notification = useNotification();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const deliverTime = new Date(order.deliverTime).toLocaleString("fr-FR", {
     day: "2-digit",
@@ -25,11 +27,12 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
     minute: "2-digit",
   });
 
-  const { mutate: deleteOrder } = useMutation({
+  const { mutate: deleteOrder, isPending: isDeletePending } = useMutation({
     mutationFn: async () => {
       await axios.delete(`/api/orders/${order.id}`);
     },
     onSuccess: () => {
+      setIsSuccess(true);
       notification.success({ description: "Commande supprimée avec succès" });
       queryClient.invalidateQueries({ queryKey: ["orders"] }).then();
     },
@@ -40,11 +43,12 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
     },
   });
 
-  const { mutate: finishOrder } = useMutation({
+  const { mutate: finishOrder, isPending: isValidatePending } = useMutation({
     mutationFn: async () => {
-      await axios.put(`/api/orders/${order.id}/validate`);
+      await axios.patch(`/api/orders/${order.id}/validate`);
     },
     onSuccess: () => {
+      setIsSuccess(true);
       notification.success({ description: "Commande terminée avec succès" });
       queryClient.invalidateQueries({ queryKey: ["orders"] }).then();
     },
@@ -54,6 +58,8 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
       });
     },
   });
+
+  const isPendingOrSuccess = isDeletePending || isValidatePending || isSuccess;
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
@@ -75,19 +81,22 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
             {deliverTime}
           </div>
         </div>
-
-        <div className="flex gap-2">
-          <ValidateButtonWithPopConfirm
-            popConfirmTitle={"Valider la livraison ?"}
-            onConfirm={() => finishOrder()}
-          />
-          <RefuseButtonWithPopConfirm
-            icon={<FontAwesomeIcon icon={faTrash} />}
-            popConfirmTitle={"Supprimer cette commande ?"}
-            popConfirmDescription={"Cette action est irréversible."}
-            onConfirm={() => deleteOrder()}
-          />
-        </div>
+        {isPendingOrSuccess ? (
+          <Spin size="large" />
+        ) : (
+          <div className="flex gap-2">
+            <ValidateButtonWithPopConfirm
+              popConfirmTitle={"Valider la livraison ?"}
+              onConfirm={() => finishOrder()}
+            />
+            <RefuseButtonWithPopConfirm
+              icon={<FontAwesomeIcon icon={faTrash} />}
+              popConfirmTitle={"Supprimer cette commande ?"}
+              popConfirmDescription={"Cette action est irréversible."}
+              onConfirm={() => deleteOrder()}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

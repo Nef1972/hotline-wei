@@ -19,6 +19,7 @@ export const AdminAccessRequestCard = ({
   accessRequest,
 }: AccessRequestCardProps) => {
   const notification = useNotification();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const createdAt = new Date(accessRequest.createdAt).toLocaleString("fr-FR", {
     day: "2-digit",
@@ -28,11 +29,9 @@ export const AdminAccessRequestCard = ({
     minute: "2-digit",
   });
 
-  const [isSucess, setIsSuccess] = useState(false);
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: ProcessAccessRequest) => {
-      await axios.put(`/api/access-requests/${accessRequest.id}`, data);
+      await axios.patch(`/api/access-requests/${accessRequest.id}`, data);
     },
     onSuccess: () => {
       setIsSuccess(true);
@@ -48,7 +47,7 @@ export const AdminAccessRequestCard = ({
     },
   });
 
-  const isPendingOrSuccess = isPending || isSucess;
+  const isPendingOrSuccess = isPending || isSuccess;
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
