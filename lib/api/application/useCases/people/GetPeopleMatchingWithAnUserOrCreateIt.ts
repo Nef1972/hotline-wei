@@ -1,11 +1,5 @@
 import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
-import { decodeToken } from "@/lib/utils/TokenUtils";
-import {
-  ClerkClaimsSchema,
-  clerkClaimsSchema,
-} from "@/lib/schemas/clerk/clerkClaimsSchema";
-import { z } from "zod";
-import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
+import { ClerkJwt, decodeToken } from "@/lib/utils/TokenUtils";
 
 export const getPeopleMatchingWithAnUserOrCreateIt = async (
   repo: PeopleRepository,
@@ -14,23 +8,13 @@ export const getPeopleMatchingWithAnUserOrCreateIt = async (
   const people = await repo.findByUserId(params.userId);
 
   if (!people) {
-    const claims = decodeToken(params.token);
+    const claims: ClerkJwt = decodeToken(params.token);
 
-    const parseResult = clerkClaimsSchema.safeParse(claims);
-
-    if (!parseResult.success) {
-      console.error("JWT claims invalid : ", z.treeifyError(parseResult.error));
-      throw new BadRequestError(
-        `Invalid JWT claims : ${JSON.stringify(claims, null, 2)}`,
-      );
-    }
-
-    const {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-    } = parseResult.data as ClerkClaimsSchema;
-
-    await repo.create({ userId: params.userId, firstName, lastName, email });
+    await repo.create({
+      userId: params.userId,
+      firstName: claims.first_name ?? `User ${Date.now()}`,
+      lastName: claims.last_name ?? "",
+      email: claims.email ?? "",
+    });
   }
 };
