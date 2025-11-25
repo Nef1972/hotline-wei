@@ -1,7 +1,6 @@
-import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 
 export interface ItemCategoryRepository {
-  findAll: (params?: {
-    itemAvailable?: boolean;
-  }) => Promise<ItemCategoryWithItems[]>;
+  findAll: () => Promise<ItemCategory[]>;
+  findById: (id: number) => Promise<ItemCategory | undefined>;
 }

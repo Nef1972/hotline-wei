@@ -12,6 +12,7 @@ export class OrderHttpMapper {
       itemId: order.itemId,
       createdAt: order.createdAt,
       deliverTime: order.deliverTime,
+      deliverPlace: order.deliverPlace,
       status: order.status,
       people: PeopleHttpMapper.toPeopleResponseDto(order.people),
       item: order.item,
