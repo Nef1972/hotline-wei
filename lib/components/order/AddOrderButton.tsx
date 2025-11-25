@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button, Form, Modal } from "antd";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { NewOrder, Order } from "@/lib/api/domain/entity/Order";
 import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
@@ -11,28 +11,18 @@ import useNotification from "@/lib/hooks/useNotification";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { queryClient } from "@/lib/query/queryClient";
 import { PlusCircleFilled } from "@ant-design/icons";
+import { Item } from "@/lib/api/domain/entity/Item";
 
-export default function AddOrderButton() {
+type AddOrderButtonProps = {
+  item: Item;
+};
+
+export default function AddOrderButton({ item }: AddOrderButtonProps) {
   const [open, setOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [form] = Form.useForm();
 
   const notification = useNotification();
-
-  const {
-    data: itemCategories,
-    isPending: isItemCategoriesPending,
-    refetch: fetchCategories,
-  } = useQuery({
-    queryKey: ["itemCategories"],
-    queryFn: async () => {
-      const res = await axios.get("/api/item-categories", {
-        params: { itemAvailable: "true" },
-      });
-      return res.data;
-    },
-    enabled: false,
-  });
 
   const { mutate: createOrder, isPending: isCreateOrderPending } = useMutation({
     mutationFn: async (data: NewOrder): Promise<Order> => {
@@ -55,8 +45,9 @@ export default function AddOrderButton() {
   const handleSubmit = async () => {
     const values = await form.validateFields();
     const parsed = createOrderSchema.safeParse({
-      itemId: values.itemId,
+      itemId: item.id,
       deliverTime: values.deliverTime?.toDate(),
+      deliverPlace: values.deliverPlace,
     });
 
     if (!parsed.success) {
@@ -66,11 +57,12 @@ export default function AddOrderButton() {
       return;
     }
 
-    const { itemId, deliverTime } = parsed.data;
+    const { itemId, deliverTime, deliverPlace } = parsed.data;
 
     createOrder({
       itemId,
       deliverTime,
+      deliverPlace,
     });
   };
 
@@ -80,7 +72,6 @@ export default function AddOrderButton() {
   };
 
   const onAddCommandClick = () => {
-    fetchCategories().then();
     setOpen(true);
   };
 
@@ -92,7 +83,7 @@ export default function AddOrderButton() {
         icon={<PlusCircleFilled />}
         onClick={onAddCommandClick}
       >
-        Ajouter une commande
+        Commander
       </Button>
 
       <Modal
@@ -107,11 +98,7 @@ export default function AddOrderButton() {
         maskClosable={false}
         destroyOnHidden
       >
-        <AddOrderForm
-          form={form}
-          setIsFormValidAction={setIsFormValid}
-          itemCategories={isItemCategoriesPending ? [] : itemCategories}
-        />
+        <AddOrderForm form={form} setIsFormValidAction={setIsFormValid} />
       </Modal>
     </>
   );

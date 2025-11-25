@@ -1,91 +1,48 @@
 "use client";
 
-import { Spin } from "antd";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useMemo, useState } from "react";
-import { OrderWithItem } from "@/lib/api/domain/entity/Order";
-import { OrderCard } from "@/lib/components/order/OrderCard";
-import { SortToggle } from "@/lib/components/toolbar/SortToggle";
-import { SortType } from "@/lib/components/toolbar/SortType";
-import { SortDateType } from "@/lib/components/toolbar/SortDateType";
-import AddOrderButton from "@/lib/components/order/AddOrderButton";
-import { AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
-import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
-import { OrderToolbarStatusFilter } from "@/lib/components/type/OrderToolbarStatusFilter";
-import { OrderToolbarSortField } from "@/lib/components/type/OrderToolbarSortField";
+import { usePeople } from "@/lib/contexts/PeopleContext";
+import { useEffect, useRef } from "react";
+import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
 
 export default function HomePage() {
-  const [statusFilter, setStatusFilter] =
-    useState<OrderToolbarStatusFilter>("ALL");
-  const [sortField, setSortField] =
-    useState<OrderToolbarSortField>("createdAt");
-  const [ascending, setAscending] = useState(true);
+  const { people } = usePeople();
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const queryParams =
-    statusFilter !== "ALL"
-      ? { orderStatuses: statusFilter }
-      : { orderStatuses: "IN_PROGRESS,DONE" };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  const { data: orders, isPending } = useQuery({
-    queryKey: ["selfOrders", statusFilter],
-    queryFn: async (): Promise<OrderWithItem[]> => {
-      const response = await axios.get("/api/orders/self", {
-        params: queryParams,
-      });
-      return response.data;
-    },
-  });
+    const handleResize = createSnowAnimation(canvas);
+    if (!handleResize) return;
 
-  const filteredSortedOrders = useMemo(() => {
-    if (!orders) return [];
-
-    return [...orders].sort((a, b) => {
-      const aDate = new Date(a[sortField]);
-      const bDate = new Date(b[sortField]);
-      return ascending
-        ? aDate.getTime() - bDate.getTime()
-        : bDate.getTime() - aDate.getTime();
-    });
-  }, [orders, sortField, ascending]);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className="w-full px-8 pt-5 h-[90vh] sm:h-[93vh] overflow-y-auto">
-      <div className="flex flex-wrap justify-center md:justify-between items-start mb-4 gap-x-2">
-        <div className="flex flex-row items-center gap-1 mb-2">
-          <FontAwesomeIcon icon={faBoxOpen} size={"2xl"} />
-          <div className="text-2xl font-semibold text-black dark:text-white">
-            Vos commandes
+    <div className="relative w-full h-[90vh] sm:h-[93vh] overflow-hidden">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <div className="text-4xl sm:text-5xl font-bold text-white drop-shadow-md">
+          Bienvenue, {people?.firstName} {people?.lastName}
+        </div>
+
+        <div className="mt-10 w-full max-w-2xl">
+          <div className="aspect-video w-full rounded-xl overflow-hidden shadow-2xl border border-white/30">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="YouTube video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
-        <AddOrderButton />
       </div>
-      <div className="flex flex-wrap gap-2 items-center justify-center md:justify-normal mb-5">
-        <SortType
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-        />
-        <SortDateType sortField={sortField} setSortField={setSortField} />
-        <SortToggle ascending={ascending} onChange={setAscending} />
-      </div>
-
-      {isPending ? (
-        <div className="flex justify-center">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <AnimatePresence>
-            {filteredSortedOrders.map((order: OrderWithItem) => (
-              <AnimateCard key={order.id}>
-                <OrderCard order={order} />
-              </AnimateCard>
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
     </div>
   );
 }

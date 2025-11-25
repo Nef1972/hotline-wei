@@ -1,20 +1,16 @@
 "use client";
 
-import { Cascader, DatePicker, Form, FormInstance } from "antd";
+import { DatePicker, Form, FormInstance, Input } from "antd";
 import { Dispatch, SetStateAction } from "react";
-import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
-import { Item } from "@/lib/api/domain/entity/Item";
 
 type AddOrderFormProps = {
   form: FormInstance;
   setIsFormValidAction: Dispatch<SetStateAction<boolean>>;
-  itemCategories: ItemCategoryWithItems[];
 };
 
 export default function AddOrderForm({
   form,
   setIsFormValidAction,
-  itemCategories,
 }: AddOrderFormProps) {
   const onFieldsChange = () => {
     const hasErrors = form
@@ -24,50 +20,8 @@ export default function AddOrderForm({
     setIsFormValidAction(!hasErrors && allTouched);
   };
 
-  type CascaderOption = {
-    value: number;
-    label: string;
-    children?: CascaderOption[];
-  };
-
-  const cascaderOptions: CascaderOption[] = itemCategories
-    .filter(
-      (itemCategory) => itemCategory.items && itemCategory.items.length > 0,
-    )
-    .map((itemCategory) => ({
-      label: itemCategory.title,
-      value: itemCategory.id,
-      children: itemCategory.items.map((item: Item) => ({
-        label: item.title,
-        value: item.id,
-      })),
-    }));
-
   return (
     <Form layout="vertical" form={form} onFieldsChange={onFieldsChange}>
-      <Form.Item
-        label="Choix de l'article"
-        name="itemId"
-        rules={[{ required: true, message: "Veuillez choisir un article" }]}
-        normalize={(value: number[] | undefined) =>
-          value ? value[value.length - 1] : undefined
-        }
-        getValueProps={(itemId: number | undefined) => {
-          if (!itemId) return { value: undefined };
-          const category = cascaderOptions.find((option) =>
-            option.children?.some((child) => child.value === itemId),
-          );
-          return { value: category ? [category.value, itemId] : undefined };
-        }}
-      >
-        <Cascader
-          placeholder="Choisir un article"
-          expandTrigger="hover"
-          options={cascaderOptions}
-          displayRender={(labels) => labels[labels.length - 1]}
-        />
-      </Form.Item>
-
       <Form.Item
         label="Date et heure de livraison"
         name="deliverTime"
@@ -84,6 +38,18 @@ export default function AddOrderForm({
           showTime={{ format: "HH:mm" }}
           format="DD-MM-YYYY HH:mm"
           inputReadOnly
+        />
+      </Form.Item>
+      <Form.Item
+        label="Lieu de livraison"
+        name="deliverPlace"
+        rules={[
+          { required: true, message: "Veuillez indiquer le lieu de livraison" },
+        ]}
+      >
+        <Input
+          placeholder="Exemple : Bâtiment A, chambre 12"
+          className="w-full"
         />
       </Form.Item>
     </Form>

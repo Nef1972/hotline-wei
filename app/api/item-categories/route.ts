@@ -1,20 +1,15 @@
 import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
 import { getAllItemCategories } from "@/lib/api/application/useCases/item-category/GetAllItemCategories";
 import { controller } from "@/lib/api/shared/http/controller";
-import { parseBooleanParam } from "@/lib/utils/QueryUtils";
 import { ItemCategoryRepositoryImpl } from "@/lib/api/infrastructure/repository/ItemCategoryRepositoryImpl";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 
-export const GET = controller(async (req: Request) => {
+export const GET = controller(async () => {
   await authenticateUserOrReject();
 
-  const url = new URL(req.url);
-  const itemAvailable = parseBooleanParam(
-    url.searchParams.get("itemAvailable"),
+  const categories: ItemCategory[] = await getAllItemCategories(
+    ItemCategoryRepositoryImpl,
   );
 
-  const categories = await getAllItemCategories(ItemCategoryRepositoryImpl, {
-    itemAvailable,
-  });
-
-  return Response.json(categories);
+  return Response.json(categories, { status: 200 });
 });

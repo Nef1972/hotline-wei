@@ -65,6 +65,7 @@ export const orders = pgTable("orders", {
     mode: "date",
     withTimezone: true,
   }).notNull(),
+  deliverPlace: text("delivery_place").notNull(),
   status: orderStatusEnum("status").default("IN_PROGRESS").notNull(),
 });
 

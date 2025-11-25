@@ -38,6 +38,7 @@ export const OrderRepositoryImpl: OrderRepository = {
           peopleId: people!.id,
           itemId: newOrder.itemId,
           deliverTime: newOrder.deliverTime,
+          deliverPlace: newOrder.deliverPlace,
         })
         .returning();
     });

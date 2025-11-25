@@ -15,7 +15,7 @@ type OrderCardProps = {
   order: OrderWithItem;
 };
 
-export const OrderCard = ({ order }: OrderCardProps) => {
+export const CommandedOrderCard = ({ order }: OrderCardProps) => {
   const notification = useNotification();
 
   const { mutate } = useMutation({
