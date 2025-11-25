@@ -1,42 +1,26 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
-import { usePeople } from "@/lib/contexts/PeopleContext";
-import { faBars, faHeadset } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
-import { AdminButton } from "@/lib/components/navbar/AdminButton";
-import { Button, ConfigProvider, Divider, Drawer } from "antd";
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
-import { DrawerItem } from "@/lib/components/navbar/DrawerItem";
+import {UserButton} from "@clerk/nextjs";
+import {useAppContext} from "@/lib/contexts/PeopleContext";
+import {faBars, faHeadset} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useRouter} from "next/navigation";
+import {AdminButton} from "@/lib/components/navbar/AdminButton";
+import {Button, ConfigProvider, Divider, Drawer} from "antd";
+import {useState} from "react";
+import {useMediaQuery} from "react-responsive";
+import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
+import {DrawerItem} from "@/lib/components/navbar/DrawerItem";
 
 export function Navbar() {
   const router = useRouter();
-  const { people } = usePeople();
+  const { people, itemCategories } = useAppContext();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  const {
-    data: itemCategories,
-    isPending: isItemCategoriesPending,
-    refetch: fetchCategories,
-  } = useQuery({
-    queryKey: ["itemCategories"],
-    queryFn: async (): Promise<ItemCategory[]> => {
-      const res = await axios.get("/api/item-categories");
-      return res.data;
-    },
-    enabled: false,
-  });
-
   const onDrawerOpen = () => {
-    fetchCategories().then();
     setIsDrawerOpen(true);
   };
 
@@ -80,7 +64,6 @@ export function Navbar() {
         placement="left"
         closable={false}
         width={isMobile ? "60%" : "25%"}
-        loading={isItemCategoriesPending}
         onClose={onDrawerClose}
       >
         <DrawerItem

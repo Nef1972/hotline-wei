@@ -2,25 +2,32 @@
 
 import { PeopleWithRole } from "@/lib/api/domain/entity/People";
 import { createContext, ReactNode, useContext } from "react";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 
-type PeopleContextValue = {
+type AppContextValue = {
   people: PeopleWithRole | null;
+  itemCategories: ItemCategory[];
 };
 
-const PeopleContext = createContext<PeopleContextValue>({
+const AppContext = createContext<AppContextValue>({
   people: null,
+  itemCategories: [],
 });
 
-export function usePeople() {
-  return useContext(PeopleContext);
+export function useAppContext() {
+  return useContext(AppContext);
 }
 
-export const PeopleProvider = ({
+export const AppContextProvider = ({
   children,
   people,
+  itemCategories,
 }: {
   children: ReactNode;
   people: PeopleWithRole;
+  itemCategories: ItemCategory[];
 }) => (
-  <PeopleContext.Provider value={{ people }}>{children}</PeopleContext.Provider>
+  <AppContext.Provider value={{ people, itemCategories }}>
+    {children}
+  </AppContext.Provider>
 );

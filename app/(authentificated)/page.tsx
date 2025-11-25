@@ -1,11 +1,11 @@
 "use client";
 
-import { usePeople } from "@/lib/contexts/PeopleContext";
+import { useAppContext } from "@/lib/contexts/PeopleContext";
 import { useEffect, useRef } from "react";
 import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
 
 export default function HomePage() {
-  const { people } = usePeople();
+  const { people } = useAppContext();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {

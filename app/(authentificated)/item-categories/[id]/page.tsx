@@ -1,6 +1,6 @@
 "use client";
 
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import {Item} from "@/lib/api/domain/entity/Item";
@@ -9,22 +9,19 @@ import {faCrosshairs} from "@fortawesome/free-solid-svg-icons";
 import {Spin} from "antd";
 import {AnimatePresence} from "framer-motion";
 import {AnimateCard} from "@/lib/components/shared/animation/AnimateCard";
-import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
 import {ItemCard} from "@/lib/components/item/ItemCard";
+import {useAppContext} from "@/lib/contexts/PeopleContext";
+import {useMemo} from "react";
+import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
 
 export default function ItemCategoryPage() {
   const params = useParams();
   const itemCategoryId = params.id as string;
 
-  const { data: itemCategory, isPending: isItemCategoryPending } = useQuery({
-    queryKey: ["itemCategory", itemCategoryId],
-    queryFn: async (): Promise<ItemCategory> => {
-      const res = await axios.get(`/api/item-categories/${itemCategoryId}`);
-      return res.data;
-    },
-  });
+  const router = useRouter();
+  const { itemCategories } = useAppContext();
 
-  const { data: items, isPending: isItemsPending } = useQuery({
+  const { data: items, isPending } = useQuery({
     queryKey: ["items", itemCategoryId],
     queryFn: async (): Promise<Item[]> => {
       const res = await axios.get(
@@ -34,7 +31,18 @@ export default function ItemCategoryPage() {
     },
   });
 
-  const isPending = isItemCategoryPending || isItemsPending;
+  const itemCategory: ItemCategory | undefined = useMemo(
+    () =>
+      itemCategories.find(
+        (itemCategory) => itemCategory.id.toString() === itemCategoryId,
+      ),
+    [itemCategories, itemCategoryId],
+  );
+
+  if (!itemCategory) {
+    router.push("/");
+    return null;
+  }
 
   if (isPending)
     return (
@@ -49,7 +57,7 @@ export default function ItemCategoryPage() {
         <div className="flex flex-row items-center gap-1 mb-2">
           <FontAwesomeIcon icon={faCrosshairs} size={"2xl"} />
           <div className="text-2xl font-semibold text-black dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-            Catégorie : {itemCategory?.title}
+            Catégorie : {itemCategory.title}
           </div>
         </div>
       </div>
