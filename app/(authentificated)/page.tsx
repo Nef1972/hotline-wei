@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppContext } from "@/lib/contexts/PeopleContext";
+import { useAppContext } from "@/lib/contexts/AppContext";
 import { useEffect, useRef } from "react";
 import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
 

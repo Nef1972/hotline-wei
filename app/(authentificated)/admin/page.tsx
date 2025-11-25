@@ -12,6 +12,7 @@ import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion"
 import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
 import { queryClient } from "@/lib/query/queryClient";
 import { AdminOrdersGestion } from "@/lib/components/admin/AdminOrdersGestion";
+import { AdminItemCategoriesGestion } from "@/lib/components/admin/AdminItemCategoriesGestion";
 
 enum TabItem {
   ACCESS_REQUESTS = "accessRequests",
@@ -39,7 +40,7 @@ export default function AdminPage() {
       key: TabItem.PRODUCTS,
       label: "Gestion des produits",
       icon: faListCheck,
-      children: <div>Contenu des produits</div>,
+      children: <AdminItemCategoriesGestion />,
     },
   ];
 

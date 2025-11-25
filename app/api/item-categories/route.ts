@@ -3,6 +3,8 @@ import { getAllItemCategories } from "@/lib/api/application/useCases/item-catego
 import { controller } from "@/lib/api/shared/http/controller";
 import { ItemCategoryRepositoryImpl } from "@/lib/api/infrastructure/repository/ItemCategoryRepositoryImpl";
 import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
+import { NextResponse } from "next/server";
+import { createNewItemCategory } from "@/lib/api/application/useCases/item-category/CreateNewItemCategory";
 
 export const GET = controller(async () => {
   await authenticateUserOrReject();
@@ -12,4 +14,19 @@ export const GET = controller(async () => {
   );
 
   return Response.json(categories, { status: 200 });
+});
+
+export const POST = controller(async (req: Request) => {
+  await authenticateUserOrReject();
+
+  const body = await req.json();
+
+  const itemCategory: ItemCategory | undefined = await createNewItemCategory(
+    ItemCategoryRepositoryImpl,
+    {
+      newItemCategory: body,
+    },
+  );
+
+  return NextResponse.json(itemCategory, { status: 201 });
 });

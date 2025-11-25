@@ -1,18 +1,18 @@
 "use client";
 
-import {useParams, useRouter} from "next/navigation";
-import {useQuery} from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {Item} from "@/lib/api/domain/entity/Item";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCrosshairs} from "@fortawesome/free-solid-svg-icons";
-import {Spin} from "antd";
-import {AnimatePresence} from "framer-motion";
-import {AnimateCard} from "@/lib/components/shared/animation/AnimateCard";
-import {ItemCard} from "@/lib/components/item/ItemCard";
-import {useAppContext} from "@/lib/contexts/PeopleContext";
-import {useMemo} from "react";
-import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
+import { Item } from "@/lib/api/domain/entity/Item";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { Spin } from "antd";
+import { AnimatePresence } from "framer-motion";
+import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
+import { ItemCard } from "@/lib/components/item/ItemCard";
+import { useAppContext } from "@/lib/contexts/AppContext";
+import { useMemo } from "react";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 
 export default function ItemCategoryPage() {
   const params = useParams();
