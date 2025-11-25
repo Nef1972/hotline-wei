@@ -1,16 +1,16 @@
 "use client";
 
-import {Spin, Tooltip} from "antd";
-import {useMutation} from "@tanstack/react-query";
+import { Spin, Tooltip } from "antd";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import {queryClient} from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
-import {ValidateButtonWithPopConfirm} from "@/lib/components/shared/buttons/ValidateButtonWithPopConfirm";
-import {RefuseButtonWithPopConfirm} from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
-import {faTrash} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {OrderWithItemAndPeopleResponseDto} from "@/lib/api/http/order/OrderResponseDto";
-import {useState} from "react";
+import { ValidateButtonWithPopConfirm } from "@/lib/components/shared/buttons/ValidateButtonWithPopConfirm";
+import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OrderWithItemAndPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
+import { useState } from "react";
 
 type OrderCardProps = {
   order: OrderWithItemAndPeopleResponseDto;
@@ -80,7 +80,7 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
             <span className="font-semibold">Livraison le : </span>
             {deliverTime}
           </div>
-            <div>
+          <div>
             <span className="font-semibold">Lieu : </span>
             {order.deliverPlace}
           </div>

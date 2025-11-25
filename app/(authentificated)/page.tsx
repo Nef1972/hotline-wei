@@ -1,8 +1,8 @@
 "use client";
 
-import {usePeople} from "@/lib/contexts/PeopleContext";
-import {useEffect, useRef} from "react";
-import {createSnowAnimation} from "@/lib/utils/AnimationUtils";
+import { usePeople } from "@/lib/contexts/PeopleContext";
+import { useEffect, useRef } from "react";
+import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
 
 export default function HomePage() {
   const { people } = usePeople();
