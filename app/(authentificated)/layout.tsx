@@ -2,11 +2,14 @@
 
 import { ReactNode } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { PeopleProvider } from "@/lib/contexts/PeopleContext";
+import { AppContextProvider } from "@/lib/contexts/PeopleContext";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/lib/components/navbar/Navbar";
 import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUser";
 import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
+import { getAllItemCategories } from "@/lib/api/application/useCases/item-category/GetAllItemCategories";
+import { ItemCategoryRepositoryImpl } from "@/lib/api/infrastructure/repository/ItemCategoryRepositoryImpl";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 
 export default async function AuthentificatedLayout({
   children,
@@ -19,14 +22,18 @@ export default async function AuthentificatedLayout({
     userId: userId!,
   });
 
+  const itemCategories: ItemCategory[] = await getAllItemCategories(
+    ItemCategoryRepositoryImpl,
+  );
+
   if (!people?.role?.hasAccess) {
     redirect("/not-allowed");
   }
 
   return (
-    <PeopleProvider people={people}>
+    <AppContextProvider people={people} itemCategories={itemCategories}>
       <Navbar />
       {children}
-    </PeopleProvider>
+    </AppContextProvider>
   );
 }
