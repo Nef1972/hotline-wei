@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { AppContextProvider } from "@/lib/contexts/PeopleContext";
+import { AppContextProvider } from "@/lib/contexts/AppContext";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/lib/components/navbar/Navbar";
 import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUser";
@@ -22,13 +22,13 @@ export default async function AuthentificatedLayout({
     userId: userId!,
   });
 
-  const itemCategories: ItemCategory[] = await getAllItemCategories(
-    ItemCategoryRepositoryImpl,
-  );
-
   if (!people?.role?.hasAccess) {
     redirect("/not-allowed");
   }
+
+  const itemCategories: ItemCategory[] = await getAllItemCategories(
+    ItemCategoryRepositoryImpl,
+  );
 
   return (
     <AppContextProvider people={people} itemCategories={itemCategories}>

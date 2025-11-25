@@ -1,16 +1,16 @@
 "use client";
 
-import {UserButton} from "@clerk/nextjs";
-import {useAppContext} from "@/lib/contexts/PeopleContext";
-import {faBars, faHeadset} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useRouter} from "next/navigation";
-import {AdminButton} from "@/lib/components/navbar/AdminButton";
-import {Button, ConfigProvider, Divider, Drawer} from "antd";
-import {useState} from "react";
-import {useMediaQuery} from "react-responsive";
-import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
-import {DrawerItem} from "@/lib/components/navbar/DrawerItem";
+import { UserButton } from "@clerk/nextjs";
+import { useAppContext } from "@/lib/contexts/AppContext";
+import { faBars, faHeadset } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
+import { AdminButton } from "@/lib/components/navbar/AdminButton";
+import { Button, ConfigProvider, Divider, Drawer } from "antd";
+import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
+import { DrawerItem } from "@/lib/components/navbar/DrawerItem";
 
 export function Navbar() {
   const router = useRouter();

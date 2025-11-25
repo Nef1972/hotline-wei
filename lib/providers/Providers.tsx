@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query/queryClient";
 import { ClerkProvider } from "@clerk/nextjs";
 import { App, ConfigProvider, theme } from "antd";
+import { ThemeContextProvider } from "@/lib/contexts/ThemeContext";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(false);
@@ -40,7 +41,9 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ClerkProvider>
         <ConfigProvider theme={memoizedTheme}>
-          <App>{children}</App>
+          <ThemeContextProvider isDark={isDark}>
+            <App>{children}</App>
+          </ThemeContextProvider>
         </ConfigProvider>
       </ClerkProvider>
     </QueryClientProvider>
