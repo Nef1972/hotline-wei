@@ -1,8 +1,8 @@
 "use client";
 
-import { usePeople } from "@/lib/contexts/PeopleContext";
-import { useEffect, useRef } from "react";
-import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
+import {usePeople} from "@/lib/contexts/PeopleContext";
+import {useEffect, useRef} from "react";
+import {createSnowAnimation} from "@/lib/utils/AnimationUtils";
 
 export default function HomePage() {
   const { people } = usePeople();
@@ -27,7 +27,7 @@ export default function HomePage() {
       />
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-        <div className="text-4xl sm:text-5xl font-bold text-white drop-shadow-md">
+        <div className="text-4xl sm:text-5xl font-bold dark:text-white text-black drop-shadow-md">
           Bienvenue, {people?.firstName} {people?.lastName}
         </div>
 

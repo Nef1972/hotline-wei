@@ -5,7 +5,7 @@ export const createSnowAnimation = (canvas: HTMLCanvasElement) => {
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
-  const snowflakes = Array.from({ length: 100 }).map(() => ({
+  const snowflakes = Array.from({ length: 50 }).map(() => ({
     x: Math.random() * width,
     y: Math.random() * height,
     r: 1 + Math.random() * 3,

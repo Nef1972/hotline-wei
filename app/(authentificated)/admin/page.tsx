@@ -1,17 +1,12 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBoxOpen,
-  faListCheck,
-  faUsers,
-  faUserTie,
-} from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion";
-import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
-import { queryClient } from "@/lib/query/queryClient";
-import { AdminOrdersGestion } from "@/lib/components/admin/AdminOrdersGestion";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBoxOpen, faListCheck, faUsers, faUserTie,} from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
+import {AdminPeoplesGestion} from "@/lib/components/admin/AdminPeoplesGestion";
+import {RefreshButton} from "@/lib/components/shared/buttons/RefreshButton";
+import {queryClient} from "@/lib/query/queryClient";
+import {AdminOrdersGestion} from "@/lib/components/admin/AdminOrdersGestion";
 
 enum TabItem {
   ACCESS_REQUESTS = "accessRequests",
@@ -49,7 +44,7 @@ export default function AdminPage() {
         <div className="items-center gap-2 mb-6 hidden md:flex">
           <FontAwesomeIcon icon={faUserTie} size={"2xl"} />
           <span className="text-xl font-semibold overflow-hidden whitespace-nowrap text-ellipsis text-black dark:text-white">
-            Pannel administrateur
+            Panel administrateur
           </span>
         </div>
 
