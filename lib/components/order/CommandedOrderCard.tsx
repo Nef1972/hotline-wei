@@ -64,6 +64,7 @@ export const CommandedOrderCard = ({ order }: OrderCardProps) => {
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
       {order.status === "IN_PROGRESS" && (
         <DeleteButton
+          className="absolute top-3 right-3"
           popConfirmTitle={"Annuler cette commande ?"}
           popConfirmDescription={"Cette action est irréversible."}
           placement="topRight"

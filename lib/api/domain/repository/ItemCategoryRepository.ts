@@ -9,4 +9,5 @@ export interface ItemCategoryRepository {
   findAllWithItems: () => Promise<ItemCategoryWithItems[]>;
   findById: (id: number) => Promise<ItemCategory | undefined>;
   create: (newItemCategory: NewItemCategory) => Promise<ItemCategory>;
+  delete: (id: number) => Promise<void>;
 }

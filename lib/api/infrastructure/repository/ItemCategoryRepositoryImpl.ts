@@ -26,4 +26,7 @@ export const ItemCategoryRepositoryImpl: ItemCategoryRepository = {
       .returning();
     return itemCategory;
   },
+  delete: async (id: number): Promise<void> => {
+    await database.delete(itemCategories).where(eq(itemCategories.id, id));
+  },
 };

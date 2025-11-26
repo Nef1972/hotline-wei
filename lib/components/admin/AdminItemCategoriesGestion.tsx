@@ -93,7 +93,7 @@ export const AdminItemCategoriesGestion = () => {
           <input
             autoFocus
             value={newTitle}
-            placeholder="Nom de l'article"
+            placeholder="Nom de la catégorie"
             onChange={(e) => setNewTitle(e.target.value)}
             onBlur={handleSubmit}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}

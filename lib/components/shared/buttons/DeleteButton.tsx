@@ -6,6 +6,7 @@ import { Popconfirm } from "antd";
 import { PopconfirmProps } from "antd/es/popconfirm";
 
 type DeleteButtonProps = {
+  className?: string;
   popConfirmTitle?: PopconfirmProps["title"];
   popConfirmDescription?: PopconfirmProps["description"];
   placement?: PopconfirmProps["placement"];
@@ -13,6 +14,7 @@ type DeleteButtonProps = {
 };
 
 export const DeleteButton = ({
+  className,
   popConfirmTitle,
   popConfirmDescription,
   placement,
@@ -26,7 +28,9 @@ export const DeleteButton = ({
     placement={placement}
     onConfirm={onConfirm}
   >
-    <div className="absolute top-3 right-3 text-red-500 hover:text-red-700 cursor-pointer">
+    <div
+      className={`text-red-500 hover:text-red-700 cursor-pointer ${className}`}
+    >
       <FontAwesomeIcon icon={faTrash} />
     </div>
   </Popconfirm>
