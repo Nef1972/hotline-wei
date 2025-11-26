@@ -40,6 +40,7 @@ export const items = pgTable("items", {
     { onDelete: "set null" },
   ),
   available: boolean("available").default(true).notNull(),
+  pictureUrl: text("picture_url"),
 });
 
 export const orderStatusEnum = pgEnum("order_status", [

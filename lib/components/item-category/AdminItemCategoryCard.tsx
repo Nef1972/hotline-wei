@@ -1,16 +1,17 @@
 "use client";
 
-import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
-import { Item, NewItem } from "@/lib/api/domain/entity/Item";
-import { AddCategoryButton } from "@/lib/components/shared/buttons/AddCategoryButton";
-import { useThemeContext } from "@/lib/contexts/ThemeContext";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import {ItemCategoryWithItems} from "@/lib/api/domain/entity/ItemCategory";
+import {Item, NewItem} from "@/lib/api/domain/entity/Item";
+import {AddCategoryButton} from "@/lib/components/shared/buttons/AddCategoryButton";
+import {useThemeContext} from "@/lib/contexts/ThemeContext";
+import {useState} from "react";
+import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import useNotification from "@/lib/hooks/useNotification";
-import { Spin } from "antd";
-import { queryClient } from "@/lib/query/queryClient";
-import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
+import {Spin} from "antd";
+import {queryClient} from "@/lib/query/queryClient";
+import {DeleteButton} from "@/lib/components/shared/buttons/DeleteButton";
+import {AdminItemCard} from "@/lib/components/item/AdminItemCard";
 
 type AdminItemCategoryCardProps = {
   itemCategoryWithItems: ItemCategoryWithItems;
@@ -85,7 +86,7 @@ export const AdminItemCategoryCard = ({
   const isPendingOrSuccess = isDeletePending || isDeleteSuccess;
 
   return (
-    <div className="flex flex-col py-2 px-3 items-center gap-2 bg-white dark:bg-zinc-950 rounded cursor-default">
+    <div className="flex flex-col h-fit py-2 px-3 items-center gap-2 bg-white dark:bg-zinc-950 rounded cursor-default">
       <div className="relative w-full flex items-center justify-center text-black dark:text-white text-xl mb-1 font-semibold font-mono">
         {itemCategoryWithItems.title}
         <div className="absolute right-0">
@@ -103,14 +104,7 @@ export const AdminItemCategoryCard = ({
       </div>
 
       {itemCategoryWithItems.items.map((item: Item) => (
-        <div
-          key={item.id}
-          className={
-            "flex justify-center w-full px-3 py-2 cursor-default rounded text-black dark:text-white bg-zinc-200 dark:bg-zinc-900 hover:bg-zinc-300 hover:dark:bg-zinc-800"
-          }
-        >
-          {item.title}
-        </div>
+        <AdminItemCard key={item.id} item={item} />
       ))}
 
       {!isCreatingItemPending ? (

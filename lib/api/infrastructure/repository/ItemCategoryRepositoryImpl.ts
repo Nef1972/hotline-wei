@@ -6,14 +6,18 @@ import {
 } from "@/lib/api/domain/entity/ItemCategory";
 import { ItemCategoryRepository } from "@/lib/api/domain/repository/ItemCategoryRepository";
 import { eq } from "drizzle-orm";
-import { itemCategories } from "@/lib/db/schema";
+import { itemCategories, items } from "@/lib/db/schema";
 
 export const ItemCategoryRepositoryImpl: ItemCategoryRepository = {
   findAll: async (): Promise<ItemCategory[]> =>
     await database.query.itemCategories.findMany(),
-  findAllWithItems: async (): Promise<ItemCategoryWithItems[]> =>
+  findAllWithAvailableItems: async (): Promise<ItemCategoryWithItems[]> =>
     await database.query.itemCategories.findMany({
-      with: { items: true },
+      with: {
+        items: {
+          where: eq(items.available, true),
+        },
+      },
     }),
   findById: async (id: number): Promise<ItemCategory | undefined> =>
     await database.query.itemCategories.findFirst({

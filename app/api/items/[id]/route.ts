@@ -1,23 +1,16 @@
 import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/AuthenticateUserOrRejectThem";
 import { controller } from "@/lib/api/shared/http/controller";
 import { NextResponse } from "next/server";
-import { getAllAvailableItemsForACategory } from "@/lib/api/application/useCases/item/GetAllAvailableItemsForACategory";
 import { ItemRepositoryImpl } from "@/lib/api/infrastructure/repository/ItemRepositoryImpl";
-import { Item } from "@/lib/api/domain/entity/Item";
+import { deleteAnItem } from "@/lib/api/application/useCases/item/DeleteAnItem";
 
-export const GET = controller(
+export const DELETE = controller(
   async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
     await authenticateUserOrReject();
 
     const { id } = await params;
+    await deleteAnItem(ItemRepositoryImpl, { id });
 
-    const items: Item[] = await getAllAvailableItemsForACategory(
-      ItemRepositoryImpl,
-      {
-        itemCategoryId: id,
-      },
-    );
-
-    return NextResponse.json(items, { status: 200 });
+    return NextResponse.json({ status: 200 });
   },
 );

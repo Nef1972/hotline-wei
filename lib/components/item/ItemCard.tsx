@@ -19,10 +19,10 @@ export const ItemCard = ({ item }: ItemCardProps) => (
     <div className="flex justify-between items-center">
       <div className="w-24 h-24 relative rounded-lg overflow-hidden">
         <Image
-          src="/placeholder.svg"
+          className="object-cover"
+          src={item?.pictureUrl ?? "/placeholder.svg"}
           alt={item.title}
           fill
-          className="object-cover"
         />
       </div>
       <AddOrderButton item={item} />

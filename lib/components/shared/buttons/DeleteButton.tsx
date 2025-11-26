@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm } from "antd";
 import { PopconfirmProps } from "antd/es/popconfirm";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 type DeleteButtonProps = {
   className?: string;
@@ -11,6 +12,7 @@ type DeleteButtonProps = {
   popConfirmDescription?: PopconfirmProps["description"];
   placement?: PopconfirmProps["placement"];
   onConfirm?: PopconfirmProps["onConfirm"];
+  icon?: IconDefinition;
 };
 
 export const DeleteButton = ({
@@ -19,6 +21,7 @@ export const DeleteButton = ({
   popConfirmDescription,
   placement,
   onConfirm,
+  icon,
 }: DeleteButtonProps) => (
   <Popconfirm
     title={popConfirmTitle}
@@ -31,7 +34,7 @@ export const DeleteButton = ({
     <div
       className={`text-red-500 hover:text-red-700 cursor-pointer ${className}`}
     >
-      <FontAwesomeIcon icon={faTrash} />
+      <FontAwesomeIcon icon={icon ?? faTrash} />
     </div>
   </Popconfirm>
 );

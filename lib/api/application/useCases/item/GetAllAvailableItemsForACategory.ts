@@ -4,7 +4,7 @@ import { idSchema } from "@/lib/schemas/utils/idSchema";
 import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
 
-export const getAllItemsForACategory = async (
+export const getAllAvailableItemsForACategory = async (
   repo: ItemRepository,
   params: { itemCategoryId: string },
 ): Promise<Item[]> => {
@@ -12,5 +12,5 @@ export const getAllItemsForACategory = async (
 
   if (!parsed.success) throw new BadRequestError(joinZodErrors(parsed));
 
-  return repo.findAllByItemCategoryId(parsed.data);
+  return repo.findAllAvailableByItemCategoryId(parsed.data);
 };
