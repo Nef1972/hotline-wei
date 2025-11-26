@@ -1,15 +1,15 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Item } from "@/lib/api/domain/entity/Item";
-import { queryClient } from "@/lib/query/queryClient";
+import {ChangeEvent, useRef, useState} from "react";
+import {useMutation} from "@tanstack/react-query";
+import {Item} from "@/lib/api/domain/entity/Item";
+import {queryClient} from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
-import { Spin } from "antd";
+import {Spin} from "antd";
 import Image from "next/image";
-import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
+import {DeleteButton} from "@/lib/components/shared/buttons/DeleteButton";
 import axios from "axios";
-import { faBan } from "@fortawesome/free-solid-svg-icons";
+import {faBan} from "@fortawesome/free-solid-svg-icons";
 
 type AdminItemCardProps = {
   item: Item;
@@ -24,14 +24,14 @@ export const AdminItemCard = ({ item }: AdminItemCardProps) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (file: File): Promise<void> => {
-      const formData = new FormData();
-      formData.append("file", file);
+        const formData = new FormData();
+        formData.append("file", file);
 
-      return axios.post(`/api/items/${item.id}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        return axios.post(`/api/items/${item.id}/upload`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
     },
     onSuccess: () => {
       queryClient
