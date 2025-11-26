@@ -6,7 +6,7 @@ import {
 
 export interface ItemCategoryRepository {
   findAll: () => Promise<ItemCategory[]>;
-  findAllWithItems: () => Promise<ItemCategoryWithItems[]>;
+  findAllWithAvailableItems: () => Promise<ItemCategoryWithItems[]>;
   findById: (id: number) => Promise<ItemCategory | undefined>;
   create: (newItemCategory: NewItemCategory) => Promise<ItemCategory>;
   delete: (id: number) => Promise<void>;
