@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
 import { getACategoryForId } from "@/lib/api/application/useCases/item-category/GetACategoryForId";
 import { ItemCategoryRepositoryImpl } from "@/lib/api/infrastructure/repository/ItemCategoryRepositoryImpl";
+import { deleteAnItemCategory } from "@/lib/api/application/useCases/item-category/DeleteAnItemCategory";
 
 export const GET = controller(
   async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
@@ -17,5 +18,16 @@ export const GET = controller(
     );
 
     return NextResponse.json(itemCategory, { status: 200 });
+  },
+);
+
+export const DELETE = controller(
+  async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
+    await authenticateUserOrReject();
+
+    const { id } = await params;
+    await deleteAnItemCategory(ItemCategoryRepositoryImpl, { id });
+
+    return NextResponse.json({ status: 200 });
   },
 );

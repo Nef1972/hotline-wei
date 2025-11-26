@@ -10,6 +10,7 @@ import axios from "axios";
 import useNotification from "@/lib/hooks/useNotification";
 import { Spin } from "antd";
 import { queryClient } from "@/lib/query/queryClient";
+import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 
 type AdminItemCategoryCardProps = {
   itemCategoryWithItems: ItemCategoryWithItems;
@@ -24,6 +25,7 @@ export const AdminItemCategoryCard = ({
 
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [isDeleteSuccess, setIsDeleteSuccess] = useState(false);
 
   const { mutate: createItem, isPending: isCreatingItemPending } = useMutation({
     mutationFn: async (data: NewItem): Promise<Item> => {
@@ -47,6 +49,27 @@ export const AdminItemCategoryCard = ({
     },
   });
 
+  const { mutate: deleteItemCategory, isPending: isDeletePending } =
+    useMutation({
+      mutationFn: async () => {
+        await axios.delete(`/api/item-categories/${itemCategoryWithItems.id}`);
+      },
+      onSuccess: () => {
+        setIsDeleteSuccess(true);
+        notification.success({
+          description: "Catégorie supprimée avec succès",
+        });
+        queryClient
+          .invalidateQueries({ queryKey: ["itemCategoriesWithItems"] })
+          .then();
+      },
+      onError: (error) => {
+        notification.error({
+          description: `Erreur lors de la suppression : ${error.message}`,
+        });
+      },
+    });
+
   const handleSubmit = () => {
     const titleToSubmit = newTitle.trim();
     if (titleToSubmit.length === 0) {
@@ -59,10 +82,24 @@ export const AdminItemCategoryCard = ({
     });
   };
 
+  const isPendingOrSuccess = isDeletePending || isDeleteSuccess;
+
   return (
     <div className="flex flex-col py-2 px-3 items-center gap-2 bg-white dark:bg-zinc-950 rounded cursor-default">
-      <div className="text-black dark:text-white text-xl mb-1 font-semibold font-mono text-center">
+      <div className="relative w-full flex items-center justify-center text-black dark:text-white text-xl mb-1 font-semibold font-mono">
         {itemCategoryWithItems.title}
+        <div className="absolute right-0">
+          {isPendingOrSuccess ? (
+            <Spin size="default" />
+          ) : (
+            <DeleteButton
+              popConfirmTitle="Supprimer cette catégorie ?"
+              popConfirmDescription="Cette action est irréversible."
+              placement="topRight"
+              onConfirm={() => deleteItemCategory()}
+            />
+          )}
+        </div>
       </div>
 
       {itemCategoryWithItems.items.map((item: Item) => (
