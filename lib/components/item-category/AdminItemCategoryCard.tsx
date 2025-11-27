@@ -4,7 +4,7 @@ import { ItemCategoryWithItems } from "@/lib/api/domain/entity/ItemCategory";
 import { Item, NewItem } from "@/lib/api/domain/entity/Item";
 import { AddCategoryButton } from "@/lib/components/shared/buttons/AddCategoryButton";
 import { useThemeContext } from "@/lib/contexts/ThemeContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useNotification from "@/lib/hooks/useNotification";
@@ -72,6 +72,14 @@ export const AdminItemCategoryCard = ({
       },
     });
 
+  const sortedItems: Item[] = useMemo(
+    () =>
+      (itemCategoryWithItems.items ?? []).sort(
+        (a: Item, b: Item) => a.id - b.id,
+      ),
+    [itemCategoryWithItems.items],
+  );
+
   const handleSubmit = () => {
     const titleToSubmit = newTitle.trim();
     if (titleToSubmit.length === 0) {
@@ -104,7 +112,7 @@ export const AdminItemCategoryCard = ({
         </div>
       </div>
 
-      {itemCategoryWithItems.items.map((item: Item) => (
+      {sortedItems.map((item: Item) => (
         <AdminItemCard key={item.id} item={item} />
       ))}
 

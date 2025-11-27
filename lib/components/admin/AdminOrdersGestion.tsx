@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
 import { AdminOrderCard } from "@/lib/components/order/AdminOrderCard";
 import { OrderWithItemAndPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
+import { useMemo } from "react";
 
 export const AdminOrdersGestion = () => {
   const { data: orders, isPending } = useQuery({
@@ -19,6 +20,17 @@ export const AdminOrdersGestion = () => {
     },
   });
 
+  const sortedOrders: OrderWithItemAndPeopleResponseDto[] = useMemo(
+    () =>
+      (orders ?? []).sort(
+        (
+          a: OrderWithItemAndPeopleResponseDto,
+          b: OrderWithItemAndPeopleResponseDto,
+        ) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      ),
+    [orders],
+  );
+
   if (isPending)
     return (
       <div className="flex justify-center">
@@ -29,7 +41,7 @@ export const AdminOrdersGestion = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <AnimatePresence>
-        {orders?.map((order: OrderWithItemAndPeopleResponseDto) => (
+        {sortedOrders?.map((order: OrderWithItemAndPeopleResponseDto) => (
           <AnimateCard key={order.id}>
             <AdminOrderCard order={order} />
           </AnimateCard>

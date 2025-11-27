@@ -7,6 +7,7 @@ import { AdminAccessRequestCard } from "@/lib/components/access-request/AdminAcc
 import { Spin } from "antd";
 import { AnimateCard } from "@/lib/components/shared/animation/AnimateCard";
 import { AccessRequestWithPeopleResponseDto } from "@/lib/api/http/access-request/AccessRequestResponseDto";
+import { useMemo } from "react";
 
 export const AdminPeoplesGestion = () => {
   const { data: accessRequests, isPending } = useQuery({
@@ -16,6 +17,17 @@ export const AdminPeoplesGestion = () => {
       return response.data;
     },
   });
+
+  const sortedAccessRequests: AccessRequestWithPeopleResponseDto[] = useMemo(
+    () =>
+      (accessRequests ?? []).sort(
+        (
+          a: AccessRequestWithPeopleResponseDto,
+          b: AccessRequestWithPeopleResponseDto,
+        ) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      ),
+    [accessRequests],
+  );
 
   if (isPending)
     return (
@@ -27,7 +39,7 @@ export const AdminPeoplesGestion = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <AnimatePresence>
-        {accessRequests?.map(
+        {sortedAccessRequests?.map(
           (accessRequest: AccessRequestWithPeopleResponseDto) => (
             <AnimateCard key={accessRequest.id}>
               <AdminAccessRequestCard accessRequest={accessRequest} />

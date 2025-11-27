@@ -10,7 +10,7 @@ import {
 import { AdminItemCategoryCard } from "@/lib/components/item-category/AdminItemCategoryCard";
 import { AddCategoryButton } from "@/lib/components/shared/buttons/AddCategoryButton";
 import { useThemeContext } from "@/lib/contexts/ThemeContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Item } from "@/lib/api/domain/entity/Item";
 import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
@@ -60,6 +60,14 @@ export const AdminItemCategoriesGestion = () => {
     },
   });
 
+  const sortedItemCategories: ItemCategoryWithItems[] = useMemo(
+    () =>
+      (itemCategoriesWithItems ?? []).sort(
+        (a: ItemCategoryWithItems, b: ItemCategoryWithItems) => a.id - b.id,
+      ),
+    [itemCategoriesWithItems],
+  );
+
   if (isFetchingItemCategoriesPending)
     return (
       <div className="flex justify-center">
@@ -80,7 +88,7 @@ export const AdminItemCategoriesGestion = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {itemCategoriesWithItems?.map(
+      {sortedItemCategories?.map(
         (itemCategoriesWithItem: ItemCategoryWithItems) => (
           <AdminItemCategoryCard
             key={itemCategoriesWithItem.id}

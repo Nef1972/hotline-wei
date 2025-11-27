@@ -17,7 +17,7 @@ import { AdminItemCategoriesGestion } from "@/lib/components/admin/AdminItemCate
 enum TabItem {
   ACCESS_REQUESTS = "accessRequests",
   ORDERS = "orders",
-  PRODUCTS = "products",
+  PRODUCTS = "itemCategoriesWithItems",
 }
 
 export default function AdminPage() {
