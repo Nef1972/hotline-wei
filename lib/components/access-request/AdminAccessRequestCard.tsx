@@ -3,7 +3,7 @@
 import { Spin, Tooltip } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { ProcessAccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import { useState } from "react";

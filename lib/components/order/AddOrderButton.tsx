@@ -9,7 +9,7 @@ import { createOrderSchema } from "@/lib/schemas/order/createOrderSchema";
 import AddOrderForm from "@/lib/components/order/AddOrderForm";
 import useNotification from "@/lib/hooks/useNotification";
 import { joinZodErrors } from "@/lib/utils/StringUtils";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { Item } from "@/lib/api/domain/entity/Item";
 import { handleAxiosError } from "@/lib/utils/QueryUtils";

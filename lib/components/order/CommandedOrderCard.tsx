@@ -6,7 +6,7 @@ import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
 import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 import { DeletedTag } from "@/lib/components/shared/tags/DeletedTag";

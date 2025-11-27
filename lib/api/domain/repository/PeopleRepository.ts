@@ -7,6 +7,10 @@ import {
 import { Status } from "@/lib/api/domain/entity/Order";
 
 export interface PeopleRepository {
+  findAllByRolePermissions: (params?: {
+    hasAccess?: boolean;
+    hasFullAccess?: boolean;
+  }) => Promise<People[]>;
   findByUserId: (userId: string) => Promise<People | undefined>;
   findWithRolesByUserId: (
     userId: string,

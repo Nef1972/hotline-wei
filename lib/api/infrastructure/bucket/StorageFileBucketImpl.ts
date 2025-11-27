@@ -1,5 +1,5 @@
 import { StorageFileBucket } from "@/lib/api/domain/bucket/StorageFileBucket";
-import { s3 } from "@/lib/bucket/s3";
+import { s3Client } from "@/lib/client/bucket/s3Client";
 import {
   PutObjectAclCommandOutput,
   PutObjectCommand,
@@ -13,7 +13,7 @@ export const StorageFileBucketImpl: StorageFileBucket = {
   }): Promise<PutObjectAclCommandOutput> => {
     const fileArrayBuffer = await params.file.arrayBuffer();
 
-    return s3.send(
+    return s3Client.send(
       new PutObjectCommand({
         Bucket: env.r2.bucket,
         Key: params.fileName,

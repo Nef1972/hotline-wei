@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useNotification from "@/lib/hooks/useNotification";
 import { Spin } from "antd";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 import { AdminItemCard } from "@/lib/components/item/AdminItemCard";
 import { handleAxiosError } from "@/lib/utils/QueryUtils";
