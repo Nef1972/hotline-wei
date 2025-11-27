@@ -1,7 +1,7 @@
-import {StorageFileBucket} from "@/lib/api/domain/bucket/StorageFileBucket";
-import {BadRequestError} from "@/lib/api/shared/errors/BadRequestError";
-import {uploadFileSchema} from "@/lib/schemas/storage-file/uploadFileSchema";
-import {joinZodErrors} from "@/lib/utils/StringUtils";
+import { StorageFileBucket } from "@/lib/api/domain/bucket/StorageFileBucket";
+import { BadRequestError } from "@/lib/api/shared/errors/BadRequestError";
+import { uploadFileSchema } from "@/lib/schemas/storage-file/uploadFileSchema";
+import { joinZodErrors } from "@/lib/utils/StringUtils";
 import env from "@/lib/utils/env";
 
 export const uploadAPictureAndGetUrl = async (
