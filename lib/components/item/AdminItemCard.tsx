@@ -1,16 +1,16 @@
 "use client";
 
-import {ChangeEvent, useRef, useState} from "react";
-import {useMutation} from "@tanstack/react-query";
-import {Item} from "@/lib/api/domain/entity/Item";
-import {queryClient} from "@/lib/query/queryClient";
+import { ChangeEvent, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Item } from "@/lib/api/domain/entity/Item";
+import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
-import {Spin} from "antd";
+import { Spin } from "antd";
 import Image from "next/image";
-import {DeleteButton} from "@/lib/components/shared/buttons/DeleteButton";
+import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 import axios from "axios";
-import {faBan} from "@fortawesome/free-solid-svg-icons";
-import {handleAxiosError} from "@/lib/utils/QueryUtils";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 type AdminItemCardProps = {
   item: Item;
