@@ -11,6 +11,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OrderWithItemAndPeopleResponseDto } from "@/lib/api/http/order/OrderResponseDto";
 import { useState } from "react";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 type OrderCardProps = {
   order: OrderWithItemAndPeopleResponseDto;
@@ -38,7 +39,7 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de la suppression : ${error.message}`,
+        description: `Erreur lors de la suppression : ${handleAxiosError(error)}`,
       });
     },
   });
@@ -54,7 +55,7 @@ export const AdminOrderCard = ({ order }: OrderCardProps) => {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de la validation : ${error.message}`,
+        description: `Erreur lors de la validation : ${handleAxiosError(error)}`,
       });
     },
   });

@@ -10,6 +10,7 @@ import { useState } from "react";
 import { ValidateButton } from "@/lib/components/shared/buttons/ValidateButton";
 import { RefuseButtonWithPopConfirm } from "@/lib/components/shared/buttons/RefuseButtonWithPopConfirm";
 import { AccessRequestWithPeopleResponseDto } from "@/lib/api/http/access-request/AccessRequestResponseDto";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 type AccessRequestCardProps = {
   accessRequest: AccessRequestWithPeopleResponseDto;
@@ -42,7 +43,7 @@ export const AdminAccessRequestCard = ({
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors du traîtement de la demande d'accès : ${error.message}`,
+        description: `Erreur lors du traîtement de la demande d'accès : ${handleAxiosError(error)}`,
       });
     },
   });

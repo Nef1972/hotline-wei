@@ -1,16 +1,20 @@
 "use client";
 
-import {useMutation, useQuery} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {Spin} from "antd";
-import {ItemCategoryWithItems, NewItemCategory,} from "@/lib/api/domain/entity/ItemCategory";
-import {AdminItemCategoryCard} from "@/lib/components/item-category/AdminItemCategoryCard";
-import {AddCategoryButton} from "@/lib/components/shared/buttons/AddCategoryButton";
-import {useThemeContext} from "@/lib/contexts/ThemeContext";
-import {useState} from "react";
-import {Item} from "@/lib/api/domain/entity/Item";
-import {queryClient} from "@/lib/query/queryClient";
+import { Spin } from "antd";
+import {
+  ItemCategoryWithItems,
+  NewItemCategory,
+} from "@/lib/api/domain/entity/ItemCategory";
+import { AdminItemCategoryCard } from "@/lib/components/item-category/AdminItemCategoryCard";
+import { AddCategoryButton } from "@/lib/components/shared/buttons/AddCategoryButton";
+import { useThemeContext } from "@/lib/contexts/ThemeContext";
+import { useState } from "react";
+import { Item } from "@/lib/api/domain/entity/Item";
+import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 export const AdminItemCategoriesGestion = () => {
   const { isDark } = useThemeContext();
@@ -47,7 +51,7 @@ export const AdminItemCategoriesGestion = () => {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de l'ajout de la catégorie : ${error.message}`,
+        description: `Erreur lors de l'ajout de la catégorie : ${handleAxiosError(error)}`,
       });
     },
     onSettled: () => {

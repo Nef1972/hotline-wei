@@ -12,6 +12,7 @@ import { joinZodErrors } from "@/lib/utils/StringUtils";
 import { queryClient } from "@/lib/query/queryClient";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { Item } from "@/lib/api/domain/entity/Item";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 type AddOrderButtonProps = {
   item: Item;
@@ -37,7 +38,7 @@ export default function AddOrderButton({ item }: AddOrderButtonProps) {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de l'enregistrement : ${error.message}`,
+        description: `Erreur lors de l'enregistrement : ${handleAxiosError(error)}`,
       });
     },
   });
