@@ -16,6 +16,7 @@ Projet de gestion de commandes pour la **Hotline Wei**, permettant aux utilisate
 * **Neon DB** – Base de données PostgreSQL.
 * **Cloudflare R2** – Bucket pour le stockage des images d’articles.
 * **Vercel** – Déploiement du projet.
+* **Resend** – Envoie de mails
 
 ---
 
