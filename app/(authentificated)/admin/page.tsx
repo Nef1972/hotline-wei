@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { AdminPeoplesGestion } from "@/lib/components/admin/AdminPeoplesGestion";
 import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import { AdminOrdersGestion } from "@/lib/components/admin/AdminOrdersGestion";
 import { AdminItemCategoriesGestion } from "@/lib/components/admin/AdminItemCategoriesGestion";
 

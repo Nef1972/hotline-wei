@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Item } from "@/lib/api/domain/entity/Item";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { Spin } from "antd";
 import Image from "next/image";

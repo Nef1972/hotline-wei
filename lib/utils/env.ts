@@ -11,6 +11,10 @@ const env = {
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
     sizeLimit: Number(process.env.R2_SIZE_LIMIT!),
   },
+  resend: {
+    apiKey: process.env.RESEND_API_KEY!,
+    activated: process.env.RESEND_ACTIVATED === "true",
+  },
 } as const;
 
 export default env;

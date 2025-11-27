@@ -1,7 +1,7 @@
 import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
 import { database } from "@/lib/db";
-import { eq } from "drizzle-orm";
-import { orders, peoples } from "@/lib/db/schema";
+import { and, eq } from "drizzle-orm";
+import { orders, peoples, roles } from "@/lib/db/schema";
 import {
   NewPeople,
   People,
@@ -12,6 +12,28 @@ import { Status } from "@/lib/api/domain/entity/Order";
 import { inArray } from "drizzle-orm/sql/expressions/conditions";
 
 export const PeopleRepositoryImpl: PeopleRepository = {
+  findAllByRolePermissions: async (params?: {
+    hasAccess?: boolean;
+    hasFullAccess?: boolean;
+  }): Promise<People[]> => {
+    const conditions = [];
+
+    if (params?.hasAccess !== undefined) {
+      conditions.push(eq(roles.hasAccess, params.hasAccess));
+    }
+
+    if (params?.hasFullAccess !== undefined) {
+      conditions.push(eq(roles.hasFullAccess, params.hasFullAccess));
+    }
+
+    const peoplesAndRole = await database
+      .select()
+      .from(peoples)
+      .leftJoin(roles, eq(peoples.roleId, roles.id))
+      .where(conditions.length ? and(...conditions) : undefined);
+
+    return peoplesAndRole.map((peopleAndRole) => peopleAndRole.peoples);
+  },
   findByUserId: async (userId: string): Promise<People | undefined> =>
     database.query.peoples.findFirst({
       where: eq(peoples.userId, userId),

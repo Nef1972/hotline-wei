@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/query/queryClient";
+import { queryClient } from "@/lib/client/query/queryClient";
 import { ClerkProvider } from "@clerk/nextjs";
 import { App, ConfigProvider, theme } from "antd";
 import { ThemeContextProvider } from "@/lib/contexts/ThemeContext";
