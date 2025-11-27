@@ -1,5 +1,8 @@
-import { StorageFile } from "@/lib/api/domain/entity/StorageFile";
+import { PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
 
 export interface StorageFileBucket {
-  upload: (params: { fileName: string; file: File }) => Promise<StorageFile>;
+  upload: (params: {
+    fileName: string;
+    file: File;
+  }) => Promise<PutObjectAclCommandOutput>;
 }
