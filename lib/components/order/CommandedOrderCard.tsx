@@ -10,6 +10,7 @@ import { queryClient } from "@/lib/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
 import { DeletedTag } from "@/lib/components/shared/tags/DeletedTag";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 type OrderCardProps = {
   order: OrderWithItem;
@@ -28,7 +29,7 @@ export const CommandedOrderCard = ({ order }: OrderCardProps) => {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de la suppression : ${error.message}`,
+        description: `Erreur lors de la suppression : ${handleAxiosError(error)}`,
       });
     },
   });

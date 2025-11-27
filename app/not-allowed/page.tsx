@@ -11,6 +11,7 @@ import axios from "axios";
 import { AccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import useNotification from "@/lib/hooks/useNotification";
 import { PeopleWithRoleResponseDto } from "@/lib/api/http/people/PeopleResponseDto";
+import { handleAxiosError } from "@/lib/utils/QueryUtils";
 
 export default function NotAllowedPage() {
   const { signOut } = useClerk();
@@ -65,7 +66,7 @@ export default function NotAllowedPage() {
     },
     onError: (error) => {
       notification.error({
-        description: `Erreur lors de la demande : ${error.message}`,
+        description: `Erreur lors de la demande : ${handleAxiosError(error)}`,
       });
     },
   });
