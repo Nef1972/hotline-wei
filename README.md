@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hotline Wei - Gestion de commandes
 
-## Getting Started
+Projet de gestion de commandes pour la **Hotline Wei**, permettant aux utilisateurs de passer et suivre des commandes, et aux administrateurs de gérer les articles et images associées.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Technologies utilisées
+
+* **Next.js (App Router / Server Components)** – Framework principal pour le frontend et le backend.
+* **TanStack Query** – Gestion des requêtes et mutations côté client.
+* **Ant Design (v5)** – Composants UI 
+* **Tailwind CSS** – Utilisé pour le style et la mise en page responsive.
+* **Zod** – Validation des données côté frontend et backend.
+* **Clerk** – Authentification et gestion des utilisateurs.
+* **Drizzle ORM** – Gestion de la base de données SQL.
+* **Neon DB** – Base de données PostgreSQL.
+* **Supabase Storage** – Bucket pour le stockage des images d’articles.
+* **Vercel** – Déploiement du projet.
+
+---
+
+## 📦 Fonctionnalités principales
+
+### Utilisateur
+
+* Voir la liste des catégories et des articles.
+* Passer des commandes avec date, heure et lieu.
+* Visualiser un historique des commandes.
+* Interface responsive pour mobile et desktop.
+
+### Administrateur
+
+* Ajouter / modifier des articles.
+* Upload d’images pour les articles avec Supabase.
+* Gestion des catégories d’articles.
+* Interface responsive et intuitive.
+
+---
+
+## 🖼 Gestion des images
+
+* Les images sont uploadées via un endpoint Next.js `/api/items/[id]/upload`.
+* Upload géré avec **TanStack Mutation** et **Axios**, avec notifications pour succès / erreur.
+* Les images sont stockées sur **Supabase Storage** (bucket public).
+* Les URLs des images sont stockées en base de données pour association aux articles.
+
+---
+
+
+## 🔐 Authentification
+
+* Utilisation de **Clerk** pour la gestion des utilisateurs.
+* Les noms et prénoms sont récupérés pour personnaliser l’interface (`Bienvenue {firstName} {lastName}`).
+
+---
+
+## 🔧 Configurations importantes
+
+### Next.js
+
+* Fonts : `Geist` et `Geist Mono` via `next/font/google`.
+* Dark mode support via Tailwind.
+* Remote images (Supabase Storage) ajoutées dans `next.config.js` :
+
+```ts
+images: {
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "YOUR_SUPABASE_PROJECT_ID.supabase.co",
+      port: "",
+      pathname: "/storage/v1/object/public/**",
+    },
+  ],
+},
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Auteurs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Paulin & Malo Bonnefoy
