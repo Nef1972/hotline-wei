@@ -7,10 +7,17 @@ import { OrderRepository } from "@/lib/api/domain/repository/OrderRepository";
 export const createNewOrder = async (
   repo: OrderRepository,
   params: { userId: string; newOrder: NewOrder },
-): Promise<Order | undefined> => {
+): Promise<Order> => {
   const parsed = createOrderSchema.safeParse(params.newOrder);
 
   if (!parsed.success) throw new BadRequestError(joinZodErrors(parsed));
 
-  return repo.create(params.userId, parsed.data);
+  const order: Order | undefined = await repo.create(
+    params.userId,
+    parsed.data,
+  );
+
+  if (!order) throw new BadRequestError("Impossible de créer la commande.");
+
+  return order;
 };
