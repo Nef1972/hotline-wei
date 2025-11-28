@@ -1,14 +1,17 @@
 import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
 import { People } from "@/lib/api/domain/entity/People";
 import { resend } from "@/lib/client/email/resend";
-import { AccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import env from "@/lib/utils/env";
+import { Order } from "@/lib/api/domain/entity/Order";
+import { ItemRepository } from "@/lib/api/domain/repository/ItemRepository";
+import { Item } from "@/lib/api/domain/entity/Item";
 
-export const sendAnAccessRequestEmailToAdmins = async (
-  repo: PeopleRepository,
-  params: { people: People; accessRequest: AccessRequest },
+export const sendAnOrderCreatedEmailToAdmins = async (
+  peopleRepo: PeopleRepository,
+  itemRepo: ItemRepository,
+  params: { people: People; order: Order },
 ): Promise<People[]> => {
-  const adminsInvolved: People[] = await repo.findAllByRolePermissions({
+  const adminsInvolved: People[] = await peopleRepo.findAllByRolePermissions({
     hasFullAccess: true,
   });
 
@@ -16,28 +19,34 @@ export const sendAnAccessRequestEmailToAdmins = async (
 
   if (adminEmails.length === 0) return [];
 
+  const item: Item | undefined = await itemRepo.findById(params.order.itemId);
+
   const email = await resend.emails.send({
     from: "Hotline Wei <no-reply@weinter-is-coming.com>",
     to: adminEmails,
-    subject: "Nouvelle demande d'accès à l'application",
+    subject: "Nouvelle commande",
     html: `
       <p>Bonjour,</p>
-      <p>Un utilisateur demande l'accès à l'application.</p>
+      <p>Une nouvelle commande est arrivée : </p>
       <p>
         <strong>Prénom : </strong> ${params.people.firstName}<br/>
         <strong>Nom : </strong> ${params.people.lastName}<br/>
-        <strong>Date : </strong> ${params.accessRequest.createdAt.toLocaleString(
+      </p>
+      <p>
+        <strong>Commande : </strong> ${item?.title}<br/>
+        <strong>Date de livraison : </strong> ${params.order.createdAt.toLocaleString(
           "fr-FR",
           {
             dateStyle: "medium",
             timeStyle: "short",
           },
         )}<br/>
+        <strong>Lieu de livraison : </strong> ${params.order.deliverPlace}<br/>
       </p>
       <p>
-        Cliquez ici pour gérer les demandes :<br/>
+        Cliquez ici pour gérer les commandes :<br/>
         <a href="${env.appUrl}/admin">
-          Voir les demandes
+          Voir les commandes
         </a>
       </p>
     `,

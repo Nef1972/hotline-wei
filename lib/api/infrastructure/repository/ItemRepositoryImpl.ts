@@ -14,6 +14,10 @@ export const ItemRepositoryImpl: ItemRepository = {
         eq(items.available, true),
       ),
     }),
+  findById: async (id: number): Promise<Item | undefined> =>
+    await database.query.items.findFirst({
+      where: eq(items.id, id),
+    }),
   create: async (newItem: NewItem): Promise<Item> => {
     const [item] = await database.insert(items).values(newItem).returning();
     return item;

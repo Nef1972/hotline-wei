@@ -38,15 +38,16 @@ export const POST = controller(async () => {
     },
   );
 
-  const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
-    userId,
-  });
+  if (env.resend.activated) {
+    const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
+      userId,
+    });
 
-  if (env.resend.activated)
     await sendAnAccessRequestEmailToAdmins(PeopleRepositoryImpl, {
       people,
       accessRequest,
     });
+  }
 
   return NextResponse.json(accessRequest, { status: 201 });
 });
