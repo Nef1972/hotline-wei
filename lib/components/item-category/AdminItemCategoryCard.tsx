@@ -95,7 +95,7 @@ export const AdminItemCategoryCard = ({
   const isPendingOrSuccess = isDeletePending || isDeleteSuccess;
 
   return (
-    <div className="flex flex-col h-fit py-2 px-3 items-center gap-2 bg-white dark:bg-zinc-950 rounded cursor-default">
+    <div className="flex flex-col h-fit py-2 px-3 items-center gap-2 bg-white dark:bg-zinc-900 rounded cursor-default">
       <div className="relative w-full flex items-center justify-center text-black dark:text-white text-xl mb-1 font-semibold font-mono">
         {itemCategoryWithItems.title}
         <div className="absolute right-0">
@@ -125,12 +125,12 @@ export const AdminItemCategoryCard = ({
             onChange={(e) => setNewTitle(e.target.value)}
             onBlur={handleSubmit}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            className="w-full h-[5.3vh] sm:h-[3.4vh] px-3 py-2 rounded bg-zinc-200 dark:bg-zinc-900 text-black dark:text-white outline-none"
+            className="w-full h-[5.3vh] sm:h-[3.4vh] px-3 py-2 rounded bg-zinc-200 dark:bg-zinc-800 text-black dark:text-white outline-none"
           />
         ) : (
           <AddCategoryButton
-            defaultBg={isDark ? "#18181b" : "#e4e4e7"}
-            defaultHoverBg={isDark ? "#27272a" : "#d4d4d8"}
+            defaultBg={isDark ? "#27272a" : "#e4e4e7"}
+            defaultHoverBg={isDark ? "#3f3f46" : "#d4d4d8"}
             defaultBorderColor={isDark ? "#71717b" : "#27272a"}
             onClick={() => setIsAdding(true)}
           />

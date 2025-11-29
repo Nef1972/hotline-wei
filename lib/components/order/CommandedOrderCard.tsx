@@ -62,7 +62,7 @@ export const CommandedOrderCard = ({ order }: OrderCardProps) => {
   };
 
   return (
-    <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
+    <div className="flex flex-col justify-between bg-white dark:bg-zinc-900 rounded-2xl shadow-md p-6 relative cursor-default">
       {order.status === "IN_PROGRESS" && (
         <DeleteButton
           className="absolute top-3 right-3"

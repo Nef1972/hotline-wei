@@ -106,11 +106,11 @@ export const AdminItemCategoriesGestion = () => {
             onChange={(e) => setNewTitle(e.target.value)}
             onBlur={handleSubmit}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            className="w-full h-[5.3vh] sm:h-[3.4vh] px-3 py-2 rounded bg-white dark:bg-zinc-950 text-black dark:text-white outline-none"
+            className="w-full h-[5.3vh] sm:h-[3.4vh] px-3 py-2 rounded bg-white dark:bg-zinc-900 text-black dark:text-white outline-none"
           />
         ) : (
           <AddCategoryButton
-            defaultBg={isDark ? "#09090b" : "#ffffff"}
+            defaultBg={isDark ? "#18181b" : "#ffffff"}
             defaultHoverBg={isDark ? "#27272a" : "#d4d4d8"}
             defaultBorderColor={isDark ? "#71717b" : "#27272a"}
             onClick={() => setIsAdding(true)}

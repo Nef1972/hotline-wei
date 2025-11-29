@@ -57,7 +57,7 @@ export default function ItemCategoryPage() {
         <div className="flex flex-row items-center gap-1 mb-2">
           <FontAwesomeIcon icon={faCrosshairs} size={"2xl"} />
           <div className="text-2xl font-semibold text-black dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-            Catégorie : {itemCategory.title}
+            {itemCategory.title}
           </div>
         </div>
       </div>
