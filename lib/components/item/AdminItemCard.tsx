@@ -80,7 +80,7 @@ export const AdminItemCard = ({ item }: AdminItemCardProps) => {
   const isDeletePendingOrSuccess = isDeletePending || isDeleteSuccess;
 
   return (
-    <div className="flex justify-between items-center w-full px-1 py-1 pr-4 cursor-default rounded text-black dark:text-white bg-zinc-200 dark:bg-zinc-900 hover:bg-zinc-300 hover:dark:bg-zinc-800">
+    <div className="flex justify-between items-center w-full px-1 py-1 pr-4 cursor-default rounded text-black dark:text-white bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 hover:dark:bg-zinc-800">
       <div className="flex items-center gap-3">
         <div className={"flex items-center justify-center w-10 h-10"}>
           {isPending ? (

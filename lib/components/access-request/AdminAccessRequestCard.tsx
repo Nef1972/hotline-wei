@@ -51,7 +51,7 @@ export const AdminAccessRequestCard = ({
   const isPendingOrSuccess = isPending || isSuccess;
 
   return (
-    <div className="flex flex-col justify-between bg-white dark:bg-zinc-950 rounded-2xl shadow-md p-6 relative cursor-default">
+    <div className="flex flex-col justify-between bg-white dark:bg-zinc-900 rounded-2xl shadow-md p-6 relative cursor-default">
       <Tooltip
         className="font-mono text-xl text-zinc-900 dark:text-white text-center line-clamp-2"
         title={`${accessRequest.people.firstName} ${accessRequest.people.lastName}`}
