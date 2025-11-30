@@ -1,5 +1,5 @@
 const CACHE_VERSION = "v3";
-const CACHE_NAME = `my-cache-${CACHE_VERSION}`;
+const CACHE_NAME = `weinter-cache-${CACHE_VERSION}`;
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
