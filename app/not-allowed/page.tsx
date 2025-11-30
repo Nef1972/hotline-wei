@@ -79,9 +79,9 @@ export default function NotAllowedPage() {
     hasProcessingAccessRequest || hasCreatedAccessRequest;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
-      <div className="flex flex-col items-center max-w-xl w-full p-4">
-        <div className="w-50 h-50 relative rounded-lg overflow-hidden">
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black overflow-hidden">
+      <div className="flex flex-col items-center justify-center max-w-xl w-full pt-2">
+        <div className="w-50 h-50 relative">
           <Image
             className="object-cover"
             src={
