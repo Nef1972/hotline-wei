@@ -1,16 +1,16 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
-import { useAppContext } from "@/lib/contexts/AppContext";
-import { faBars, faHeadset } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/navigation";
-import { AdminButton } from "@/lib/components/navbar/AdminButton";
-import { Button, ConfigProvider, Divider, Drawer } from "antd";
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
-import { DrawerItem } from "@/lib/components/navbar/DrawerItem";
+import {UserButton} from "@clerk/nextjs";
+import {useAppContext} from "@/lib/contexts/AppContext";
+import {faBars, faHeadset} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useRouter} from "next/navigation";
+import {AdminButton} from "@/lib/components/navbar/AdminButton";
+import {Button, ConfigProvider, Divider, Drawer} from "antd";
+import {useState} from "react";
+import {useMediaQuery} from "react-responsive";
+import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
+import {DrawerItem} from "@/lib/components/navbar/DrawerItem";
 
 export function Navbar() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export function Navbar() {
         onClick={() => router.push("/")}
       >
         <FontAwesomeIcon icon={faHeadset} size={"2xl"} />
-        <h1 className="text-xl font-bold">Hotline Wei</h1>
+        <h1 className="text-xl font-bold">Weinter is coming</h1>
       </div>
       <div className="flex justify-end gap-5 md:right-4">
         {people?.role?.hasFullAccess && <AdminButton />}
