@@ -1,9 +1,9 @@
 {
   "name": "Weinter is coming",
-  "short_name": "Weinter is coming",
+  "short_name": "Weinter",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#18181b",
+  "background_color": "#ffffff",
   "theme_color": "#000000",
   "description": "PWA Weinter is coming",
   "icons": [
