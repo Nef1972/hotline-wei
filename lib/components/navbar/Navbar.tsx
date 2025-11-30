@@ -1,16 +1,17 @@
 "use client";
 
-import {UserButton} from "@clerk/nextjs";
-import {useAppContext} from "@/lib/contexts/AppContext";
-import {faBars, faHeadset} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useRouter} from "next/navigation";
-import {AdminButton} from "@/lib/components/navbar/AdminButton";
-import {Button, ConfigProvider, Divider, Drawer} from "antd";
-import {useState} from "react";
-import {useMediaQuery} from "react-responsive";
-import {ItemCategory} from "@/lib/api/domain/entity/ItemCategory";
-import {DrawerItem} from "@/lib/components/navbar/DrawerItem";
+import { UserButton } from "@clerk/nextjs";
+import { useAppContext } from "@/lib/contexts/AppContext";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
+import { AdminButton } from "@/lib/components/navbar/AdminButton";
+import { Button, ConfigProvider, Divider, Drawer } from "antd";
+import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { ItemCategory } from "@/lib/api/domain/entity/ItemCategory";
+import { DrawerItem } from "@/lib/components/navbar/DrawerItem";
+import Image from "next/image";
 
 export function Navbar() {
   const router = useRouter();
@@ -50,8 +51,14 @@ export function Navbar() {
         className="md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center gap-1 cursor-pointer"
         onClick={() => router.push("/")}
       >
-        <FontAwesomeIcon icon={faHeadset} size={"2xl"} />
-        <h1 className="text-xl font-bold">Weinter is coming</h1>
+        <div className="w-15 h-15 relative rounded-lg overflow-hidden">
+          <Image
+            className="object-cover"
+            src={"/icons/weinter-is-coming.svg"}
+            alt={"weinter-is-coming"}
+            fill
+          />
+        </div>
       </div>
       <div className="flex justify-end gap-5 md:right-4">
         {people?.role?.hasFullAccess && <AdminButton />}
