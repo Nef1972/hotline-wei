@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const CACHE_NAME = `weinter-cache-${CACHE_VERSION}`;
 
 self.addEventListener("install", (event) => {
