@@ -1,10 +1,10 @@
-import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
-import { People } from "@/lib/api/domain/entity/People";
-import { resend } from "@/lib/client/email/resend";
+import {PeopleRepository} from "@/lib/api/domain/repository/PeopleRepository";
+import {People} from "@/lib/api/domain/entity/People";
+import {resend} from "@/lib/client/email/resend";
 import env from "@/lib/utils/env";
-import { Order } from "@/lib/api/domain/entity/Order";
-import { ItemRepository } from "@/lib/api/domain/repository/ItemRepository";
-import { Item } from "@/lib/api/domain/entity/Item";
+import {Order} from "@/lib/api/domain/entity/Order";
+import {ItemRepository} from "@/lib/api/domain/repository/ItemRepository";
+import {Item} from "@/lib/api/domain/entity/Item";
 
 export const sendAnOrderCreatedEmailToAdmins = async (
   peopleRepo: PeopleRepository,
@@ -22,7 +22,7 @@ export const sendAnOrderCreatedEmailToAdmins = async (
   const item: Item | undefined = await itemRepo.findById(params.order.itemId);
 
   const email = await resend.emails.send({
-    from: "Hotline Wei <no-reply@weinter-is-coming.com>",
+    from: "Weinter is coming <no-reply@weinter-is-coming.com>",
     to: adminEmails,
     subject: "Nouvelle commande",
     html: `
