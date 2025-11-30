@@ -13,6 +13,7 @@ export const sendAnOrderCreatedEmailToAdmins = async (
 ): Promise<People[]> => {
   const adminsInvolved: People[] = await peopleRepo.findAllByRolePermissions({
     hasFullAccess: true,
+    hasEmailNotifications: true,
   });
 
   const adminEmails: string[] = adminsInvolved.map((admin) => admin.email);

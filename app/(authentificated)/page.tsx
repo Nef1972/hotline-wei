@@ -1,10 +1,10 @@
 "use client";
 
-import {useAppContext} from "@/lib/contexts/AppContext";
-import {useEffect, useRef} from "react";
-import {createSnowAnimation} from "@/lib/utils/AnimationUtils";
+import { useAppContext } from "@/lib/contexts/AppContext";
+import { useEffect, useRef } from "react";
+import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
 import Image from "next/image";
-import {useThemeContext} from "@/lib/contexts/ThemeContext";
+import { useThemeContext } from "@/lib/contexts/ThemeContext";
 
 export default function HomePage() {
   const { people } = useAppContext();

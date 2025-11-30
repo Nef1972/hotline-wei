@@ -15,6 +15,7 @@ export const PeopleRepositoryImpl: PeopleRepository = {
   findAllByRolePermissions: async (params?: {
     hasAccess?: boolean;
     hasFullAccess?: boolean;
+    hasEmailNotifications?: boolean;
   }): Promise<People[]> => {
     const conditions = [];
 
@@ -24,6 +25,12 @@ export const PeopleRepositoryImpl: PeopleRepository = {
 
     if (params?.hasFullAccess !== undefined) {
       conditions.push(eq(roles.hasFullAccess, params.hasFullAccess));
+    }
+
+    if (params?.hasEmailNotifications !== undefined) {
+      conditions.push(
+        eq(roles.hasEmailNotifications, params.hasEmailNotifications),
+      );
     }
 
     const peoplesAndRole = await database
