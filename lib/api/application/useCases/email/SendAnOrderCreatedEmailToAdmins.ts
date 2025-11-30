@@ -34,7 +34,7 @@ export const sendAnOrderCreatedEmailToAdmins = async (
       </p>
       <p>
         <strong>Commande : </strong> ${item?.title}<br/>
-        <strong>Date de livraison : </strong> ${params.order.createdAt.toLocaleString(
+        <strong>Date de livraison : </strong> ${params.order.deliverTime.toLocaleString(
           "fr-FR",
           {
             dateStyle: "medium",
