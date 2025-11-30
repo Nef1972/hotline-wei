@@ -1,10 +1,10 @@
 "use client";
 
-import { useAppContext } from "@/lib/contexts/AppContext";
-import { useEffect, useRef } from "react";
-import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
+import {useAppContext} from "@/lib/contexts/AppContext";
+import {useEffect, useRef} from "react";
+import {createSnowAnimation} from "@/lib/utils/AnimationUtils";
 import Image from "next/image";
-import { useThemeContext } from "@/lib/contexts/ThemeContext";
+import {useThemeContext} from "@/lib/contexts/ThemeContext";
 
 export default function HomePage() {
   const { people } = useAppContext();
@@ -51,7 +51,7 @@ export default function HomePage() {
           <div className="aspect-video w-full rounded-xl overflow-hidden shadow-2xl border border-white/30">
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              src="https://www.youtube.com/embed/0uM7vrIzHhg "
               title="YouTube video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
