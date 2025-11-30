@@ -14,6 +14,9 @@ export const roles = pgTable("roles", {
   name: text("name").default("User").notNull(),
   hasAccess: boolean("has_access").default(false).notNull(),
   hasFullAccess: boolean("has_full_access").default(false).notNull(),
+  hasEmailNotifications: boolean("has_email_notifications")
+    .default(false)
+    .notNull(),
 });
 
 export const peoples = pgTable("peoples", {

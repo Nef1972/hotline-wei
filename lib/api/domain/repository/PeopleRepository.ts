@@ -10,6 +10,7 @@ export interface PeopleRepository {
   findAllByRolePermissions: (params?: {
     hasAccess?: boolean;
     hasFullAccess?: boolean;
+    hasEmailNotifications?: boolean;
   }) => Promise<People[]>;
   findByUserId: (userId: string) => Promise<People | undefined>;
   findWithRolesByUserId: (
