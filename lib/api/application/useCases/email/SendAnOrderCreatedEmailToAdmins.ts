@@ -1,10 +1,10 @@
-import {PeopleRepository} from "@/lib/api/domain/repository/PeopleRepository";
-import {People} from "@/lib/api/domain/entity/People";
-import {resend} from "@/lib/client/email/resend";
+import { PeopleRepository } from "@/lib/api/domain/repository/PeopleRepository";
+import { People } from "@/lib/api/domain/entity/People";
+import { resend } from "@/lib/client/email/resend";
 import env from "@/lib/utils/env";
-import {Order} from "@/lib/api/domain/entity/Order";
-import {ItemRepository} from "@/lib/api/domain/repository/ItemRepository";
-import {Item} from "@/lib/api/domain/entity/Item";
+import { Order } from "@/lib/api/domain/entity/Order";
+import { ItemRepository } from "@/lib/api/domain/repository/ItemRepository";
+import { Item } from "@/lib/api/domain/entity/Item";
 
 export const sendAnOrderCreatedEmailToAdmins = async (
   peopleRepo: PeopleRepository,

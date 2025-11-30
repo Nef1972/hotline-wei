@@ -12,6 +12,8 @@ import { AccessRequest } from "@/lib/api/domain/entity/AccessRequest";
 import useNotification from "@/lib/hooks/useNotification";
 import { PeopleWithRoleResponseDto } from "@/lib/api/http/people/PeopleResponseDto";
 import { handleAxiosError } from "@/lib/utils/QueryUtils";
+import Image from "next/image";
+import { useThemeContext } from "@/lib/contexts/ThemeContext";
 
 export default function NotAllowedPage() {
   const { signOut } = useClerk();
@@ -19,6 +21,8 @@ export default function NotAllowedPage() {
   const router = useRouter();
 
   const notification = useNotification();
+
+  const { isDark } = useThemeContext();
 
   const [hasCreatedAccessRequest, setHasCreatedAccessRequest] = useState(false);
 
@@ -76,7 +80,19 @@ export default function NotAllowedPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
-      <div className="max-w-xl w-full px-4">
+      <div className="flex flex-col items-center max-w-xl w-full p-4">
+        <div className="w-50 h-50 relative rounded-lg overflow-hidden">
+          <Image
+            className="object-cover"
+            src={
+              isDark
+                ? "/icons/weinter-is-coming-text-white.svg"
+                : "/icons/weinter-is-coming-text.svg"
+            }
+            alt={"weinter-is-coming"}
+            fill
+          />
+        </div>
         <Result
           icon={
             <div className="scale-[2.0]">

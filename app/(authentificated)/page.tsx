@@ -3,10 +3,14 @@
 import { useAppContext } from "@/lib/contexts/AppContext";
 import { useEffect, useRef } from "react";
 import { createSnowAnimation } from "@/lib/utils/AnimationUtils";
+import Image from "next/image";
+import { useThemeContext } from "@/lib/contexts/ThemeContext";
 
 export default function HomePage() {
   const { people } = useAppContext();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const { isDark } = useThemeContext();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,6 +31,18 @@ export default function HomePage() {
       />
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <div className="w-50 h-50 relative rounded-lg overflow-hidden">
+          <Image
+            className="object-cover"
+            src={
+              isDark
+                ? "/icons/weinter-is-coming-text-white.svg"
+                : "/icons/weinter-is-coming-text.svg"
+            }
+            alt={"weinter-is-coming"}
+            fill
+          />
+        </div>
         <div className="text-4xl sm:text-5xl font-bold dark:text-white text-black drop-shadow-md">
           Bienvenue, {people?.firstName} {people?.lastName}
         </div>

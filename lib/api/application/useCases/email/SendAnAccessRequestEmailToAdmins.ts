@@ -17,7 +17,7 @@ export const sendAnAccessRequestEmailToAdmins = async (
   if (adminEmails.length === 0) return [];
 
   const email = await resend.emails.send({
-    from: "Hotline Wei <no-reply@weinter-is-coming.com>",
+    from: "Weinter is coming <no-reply@weinter-is-coming.com>",
     to: adminEmails,
     subject: "Nouvelle demande d'accès à l'application",
     html: `
