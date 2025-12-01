@@ -26,7 +26,8 @@ export const AdminOrdersGestion = () => {
         (
           a: OrderWithItemAndPeopleResponseDto,
           b: OrderWithItemAndPeopleResponseDto,
-        ) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        ) =>
+          new Date(a.deliverTime).getTime() - new Date(b.deliverTime).getTime(),
       ),
     [orders],
   );
