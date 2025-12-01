@@ -9,12 +9,16 @@ export class OrderHttpMapper {
     return {
       id: order.id,
       peopleId: order.peopleId,
+      operatorId: order.operatorId,
       itemId: order.itemId,
       createdAt: order.createdAt,
       deliverTime: order.deliverTime,
       deliverPlace: order.deliverPlace,
       status: order.status,
       people: PeopleHttpMapper.toPeopleResponseDto(order.people),
+      operator: order.operator
+        ? PeopleHttpMapper.toPeopleResponseDto(order.operator)
+        : null,
       item: order.item,
     };
   }

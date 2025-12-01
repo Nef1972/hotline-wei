@@ -3,13 +3,19 @@ import { authenticateUserOrReject } from "@/lib/api/application/useCases/auth/Au
 import { validateAnOrder } from "@/lib/api/application/useCases/order/ValidateAnOrder";
 import { OrderRepositoryImpl } from "@/lib/api/infrastructure/repository/OrderRepositoryImpl";
 import { NextResponse } from "next/server";
+import { getPeopleMatchingWithAnUser } from "@/lib/api/application/useCases/people/GetPeopleMatchingWithAnUser";
+import { PeopleRepositoryImpl } from "@/lib/api/infrastructure/repository/PeopleRepositoryImpl";
 
 export const PATCH = controller(
   async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
-    await authenticateUserOrReject();
+    const userId = await authenticateUserOrReject();
+
+    const people = await getPeopleMatchingWithAnUser(PeopleRepositoryImpl, {
+      userId,
+    });
 
     const { id } = await params;
-    await validateAnOrder(OrderRepositoryImpl, { id });
+    await validateAnOrder(OrderRepositoryImpl, { id, people });
 
     return NextResponse.json({ status: 200 });
   },

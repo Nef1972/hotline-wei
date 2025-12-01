@@ -8,6 +8,8 @@ import {
 export interface OrderRepository {
   findAll: (params?: {
     statuses?: Status[];
+    peopleId?: number;
+    operatorId?: number;
   }) => Promise<OrderWithItemAndPeople[]>;
   create: (userId: string, newOrder: NewOrder) => Promise<Order | undefined>;
   update: (id: number, order: Partial<Order>) => Promise<Order>;

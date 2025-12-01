@@ -6,9 +6,9 @@ import axios from "axios";
 import { useMemo, useState } from "react";
 import { OrderWithItem } from "@/lib/api/domain/entity/Order";
 import { CommandedOrderCard } from "@/lib/components/order/CommandedOrderCard";
-import { SortToggle } from "@/lib/components/toolbar/SortToggle";
-import { SortType } from "@/lib/components/toolbar/SortType";
-import { SortDateType } from "@/lib/components/toolbar/SortDateType";
+import { SortToggle } from "@/lib/components/order/toolbar/SortToggle";
+import { SortType } from "@/lib/components/order/toolbar/SortType";
+import { SortDateType } from "@/lib/components/order/toolbar/SortDateType";
 import { AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
@@ -23,13 +23,12 @@ export default function HomePage() {
     useState<OrderToolbarSortField>("createdAt");
   const [ascending, setAscending] = useState(true);
 
-  const queryParams =
-    statusFilter !== "ALL"
-      ? { orderStatuses: statusFilter }
-      : { orderStatuses: "IN_PROGRESS,DONE" };
+  const queryParams = {
+    orderStatuses: statusFilter !== "ALL" ? statusFilter : "IN_PROGRESS,DONE",
+  };
 
   const { data: orders, isPending } = useQuery({
-    queryKey: ["selfOrders", statusFilter],
+    queryKey: ["selfOrders", queryParams],
     queryFn: async (): Promise<OrderWithItem[]> => {
       const response = await axios.get("/api/orders/self", {
         params: queryParams,

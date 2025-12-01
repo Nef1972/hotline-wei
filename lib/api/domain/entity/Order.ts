@@ -13,6 +13,7 @@ export type OrderWithItem = Order & {
 
 export type OrderWithItemAndPeople = OrderWithItem & {
   people: People;
+  operator: People | null;
 };
 
 export type NewOrder = z.infer<typeof createOrderSchema>;

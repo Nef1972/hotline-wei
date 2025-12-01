@@ -17,11 +17,15 @@ export const GET = controller(async (req: Request) => {
 
   const url = new URL(req.url);
   const statuses = url.searchParams.get("statuses") ?? undefined;
+  const peopleId = url.searchParams.get("peopleId") ?? undefined;
+  const operatorId = url.searchParams.get("operatorId") ?? undefined;
 
   const orders: OrderWithItemAndPeople[] = await getAllActiveOrdersWithCreator(
     OrderRepositoryImpl,
     {
       statuses,
+      peopleId,
+      operatorId,
     },
   );
 

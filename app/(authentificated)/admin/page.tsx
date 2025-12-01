@@ -3,6 +3,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBoxOpen,
+  faClockRotateLeft,
   faListCheck,
   faUsers,
   faUserTie,
@@ -13,11 +14,13 @@ import { RefreshButton } from "@/lib/components/shared/buttons/RefreshButton";
 import { queryClient } from "@/lib/client/query/queryClient";
 import { AdminOrdersGestion } from "@/lib/components/admin/AdminOrdersGestion";
 import { AdminItemCategoriesGestion } from "@/lib/components/admin/AdminItemCategoriesGestion";
+import { AdminOrdersHistory } from "@/lib/components/admin/AdminOrdersHistory";
 
 enum TabItem {
   ACCESS_REQUESTS = "accessRequests",
   ORDERS = "orders",
   PRODUCTS = "itemCategoriesWithItems",
+  HISTORY = "ordersHistory",
 }
 
 export default function AdminPage() {
@@ -35,6 +38,12 @@ export default function AdminPage() {
       label: "Commandes",
       icon: faBoxOpen,
       children: <AdminOrdersGestion />,
+    },
+    {
+      key: TabItem.HISTORY,
+      label: "Historique des commandes",
+      icon: faClockRotateLeft,
+      children: <AdminOrdersHistory />,
     },
     {
       key: TabItem.PRODUCTS,

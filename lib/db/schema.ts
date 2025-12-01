@@ -71,6 +71,9 @@ export const orders = pgTable("orders", {
   }).notNull(),
   deliverPlace: text("delivery_place").notNull(),
   status: orderStatusEnum("status").default("IN_PROGRESS").notNull(),
+  operatorId: integer("operator_id").references(() => peoples.id, {
+    onDelete: "set null",
+  }),
 });
 
 export const accessRequests = pgTable("access_requests", {
@@ -93,7 +96,7 @@ export const peopleRelations = relations(peoples, ({ one, many }) => ({
     fields: [peoples.roleId],
     references: [roles.id],
   }),
-  orders: many(orders),
+  orders: many(orders, { relationName: "ordersPeople" }),
   accessRequests: many(accessRequests),
 }));
 
@@ -113,6 +116,12 @@ export const orderRelations = relations(orders, ({ one }) => ({
   people: one(peoples, {
     fields: [orders.peopleId],
     references: [peoples.id],
+    relationName: "ordersPeople",
+  }),
+  operator: one(peoples, {
+    fields: [orders.operatorId],
+    references: [peoples.id],
+    relationName: "ordersOperator",
   }),
   item: one(items, {
     fields: [orders.itemId],
