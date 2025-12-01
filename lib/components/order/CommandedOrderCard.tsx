@@ -2,15 +2,13 @@
 
 import { Tooltip } from "antd";
 import { OrderWithItem } from "@/lib/api/domain/entity/Order";
-import { DoneTag } from "@/lib/components/shared/tags/DoneTag";
-import { InProgressTag } from "@/lib/components/shared/tags/InProgressTag";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { queryClient } from "@/lib/client/query/queryClient";
 import useNotification from "@/lib/hooks/useNotification";
 import { DeleteButton } from "@/lib/components/shared/buttons/DeleteButton";
-import { DeletedTag } from "@/lib/components/shared/tags/DeletedTag";
 import { handleAxiosError } from "@/lib/utils/QueryUtils";
+import { statusTag } from "@/lib/utils/OrderUtils";
 
 type OrderCardProps = {
   order: OrderWithItem;
@@ -48,19 +46,6 @@ export const CommandedOrderCard = ({ order }: OrderCardProps) => {
     minute: "2-digit",
   });
 
-  const statusTag = () => {
-    switch (order.status) {
-      case "DONE":
-        return <DoneTag />;
-      case "IN_PROGRESS":
-        return <InProgressTag />;
-      case "DELETED":
-        return <DeletedTag />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-zinc-900 rounded-2xl shadow-md p-6 relative cursor-default">
       {order.status === "IN_PROGRESS" && (
@@ -92,7 +77,7 @@ export const CommandedOrderCard = ({ order }: OrderCardProps) => {
           </div>
         </div>
 
-        <div>{statusTag()}</div>
+        <div>{statusTag(order)}</div>
       </div>
     </div>
   );

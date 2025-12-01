@@ -1,5 +1,5 @@
 import { database } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { orders, peoples } from "@/lib/db/schema";
 import {
   NewOrder,
@@ -14,13 +14,22 @@ import { inArray } from "drizzle-orm/sql/expressions/conditions";
 export const OrderRepositoryImpl: OrderRepository = {
   findAll: async (params?: {
     statuses?: Status[];
+    peopleId?: number;
+    operatorId?: number;
   }): Promise<OrderWithItemAndPeople[]> =>
     await database.query.orders.findMany({
-      where:
+      where: and(
         params?.statuses !== undefined
           ? inArray(orders.status, params.statuses)
           : undefined,
-      with: { people: true, item: true },
+        params?.peopleId !== undefined
+          ? eq(orders.peopleId, params.peopleId)
+          : undefined,
+        params?.operatorId !== undefined
+          ? eq(orders.operatorId, params.operatorId)
+          : undefined,
+      ),
+      with: { people: true, operator: true, item: true },
     }),
 
   create: async (
