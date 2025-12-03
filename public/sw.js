@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v7";
+const CACHE_VERSION = "v8";
 const CACHE_NAME = `weinter-cache-${CACHE_VERSION}`;
 
 self.addEventListener("install", (event) => {
@@ -33,5 +33,9 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
+    }),
+  );
 });
